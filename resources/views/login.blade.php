@@ -13,7 +13,7 @@
         <img src="img/raj.png" alt="No Image" />
       </div>
       <div class="login-form">
-        <h2>Welcome to Myshop</h2>
+        <h2>Welcome to Myshop</h2>      
         <p></p>
 
         <div class="input-group">
