@@ -19,7 +19,9 @@ Route::get('customer', [UserController::class, 'customer'])->name('customer');
 Route::get('invoice', [UserController::class, 'invoice'])->name('invoice');
 Route::get('setting', [UserController::class, 'setting'])->name('setting');
 Route::get('viewprofile', [UserController::class, 'viewprofile'])->name('viewprofile');
-Route::post('registers', [RegisterController::class, 'register']);
 
 
-Route::post('invoice', [InvoiceController::class, 'store'])->name('invoice.store');
+Route::post('registers', [RegisterController::class, 'register'])->name('registers');
+
+
+Route::post('invoice', [InvoiceController::class, 'store'])->name('invoice');

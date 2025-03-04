@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('invoices', function (Blueprint $table) {
-            $table->id('id');
-            $table->foreignId('customer_id')->constrained()->onDelete('cascade');
+            $table->id(); // Primary key
+            $table->foreignId('customer_id')->constrained('customers')->onDelete('cascade');
             $table->string('bill_no')->unique();
             $table->string('invoice_number')->unique();
             $table->string('order_id')->unique();

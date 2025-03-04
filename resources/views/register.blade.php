@@ -17,7 +17,7 @@
       <div class="login-form">
         <h2>Welcome to Myshop</h2>
   
-        <form action="registers" method="POST">
+        <form action="{{ route('registers') }}" method="POST">
           <!-- CSRF Token for Laravel -->
           @csrf
   

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('customers', function (Blueprint $table) {
-            $table->id('customer_id');
+            $table->id(); // Laravel default primary key (bigint unsigned, auto-increment)
             $table->string('name');
             $table->string('address');
             $table->string('email')->unique();
