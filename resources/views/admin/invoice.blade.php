@@ -167,7 +167,7 @@
 </style> 
     
 <div class="container">
-  <form action="#" method="POST">
+  <form action="{{ route('invoice.store') }}" method="POST">
       @csrf
 
       <div class="invoice p-3 mb-3">

@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\InvoiceController;
 
 
 
@@ -19,3 +20,6 @@ Route::get('invoice', [UserController::class, 'invoice'])->name('invoice');
 Route::get('setting', [UserController::class, 'setting'])->name('setting');
 Route::get('viewprofile', [UserController::class, 'viewprofile'])->name('viewprofile');
 Route::post('registers', [RegisterController::class, 'register']);
+
+
+Route::post('invoice', [InvoiceController::class, 'store'])->name('invoice.store');
