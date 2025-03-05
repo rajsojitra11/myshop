@@ -7,18 +7,18 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('customers', function (Blueprint $table) {
-            $table->id();
+        Schema::create('products', function (Blueprint $table) {
+            $table->id(); // Primary key (bigint unsigned)
             $table->string('name');
-            $table->string('address');
-            $table->string('email')->unique();
-            $table->string('mobile_no');
+            $table->text('description')->nullable();
+            $table->decimal('price', 10, 2);
+            $table->integer('stock_quantity')->default(0);
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('customers');
+        Schema::dropIfExists('products');
     }
 };
