@@ -8,14 +8,16 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id(); // Primary key (bigint unsigned)
+            $table->id();
+            $table->string('code')->unique();  // Ensure 'code' column exists
             $table->string('name');
-            $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
-            $table->integer('stock_quantity')->default(0);
+            $table->integer('stock_quantity');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }
+
 
     public function down(): void
     {

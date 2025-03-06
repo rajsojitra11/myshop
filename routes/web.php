@@ -6,7 +6,7 @@ use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\InvoiceController;
-
+use App\Http\Controllers\ProductController;
 
 
 
@@ -22,6 +22,6 @@ Route::get('viewprofile', [UserController::class, 'viewprofile'])->name('viewpro
 
 
 Route::post('registers', [RegisterController::class, 'register'])->name('registers');
-
+Route::post('pstore', [ProductController::class, 'store'])->name('pstore');
 
 Route::post('invoice', [InvoiceController::class, 'store'])->name('invoice');

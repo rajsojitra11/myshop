@@ -16,25 +16,27 @@
         <h2>Welcome to Myshop</h2>      
         <p></p>
 
-        <div class="input-group">
-          <label for="username">Username or email</label>
-          <input type="text" id="username" name="username" required />
-        </div>
-
-        <div class="input-group">
-          <label for="password">Password</label>
-          <input type="password" id="password" name="password" required />
-        </div>
-
-        <div class="remember-forgot">
-          <label for="remember">
-            <input type="checkbox" id="remember" name="remember" /> Remember Me
-          </label>
-          <a href="#">Forgot Password?</a>
-        </div>
-
-        <button type="submit" class="btn">Sign in</button>
-
+        <form action="{{Route('login')}}" method="POST">
+          <div class="input-group">
+            <label for="username">Username or email</label>
+            <input type="text" id="username" name="username" required />
+          </div>
+  
+          <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required />
+          </div>
+  
+          <div class="remember-forgot">
+            <label for="remember">
+              <input type="checkbox" id="remember" name="remember" /> Remember Me
+            </label>
+            <a href="#">Forgot Password?</a>
+          </div>
+  
+          <button type="submit" class="btn">Sign in</button>
+        </form>
+  
         <div class="signup-link">
           Don't have an account? <a href="{{Route('register')}}">Sign up</a>
         </div>

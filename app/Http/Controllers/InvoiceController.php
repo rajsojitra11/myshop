@@ -13,6 +13,30 @@ class InvoiceController extends Controller
     //
     public function store(Request $request)
     {
+        // Validate request data
+        $request->validate([
+            'to_name' => 'required|string',
+            'to_address' => 'required|string',
+            'to_email' => 'required|email',
+            'mobile_no' => 'required|string',
+            'bill_no' => 'required|string|unique:invoices,bill_no',
+            'invoice_number' => 'required|string|unique:invoices,invoice_number',
+            'order_id' => 'required|string|unique:invoices,order_id',
+            'account_number' => 'required|string',
+            'subtotal' => 'required|numeric',
+            'tax' => 'required|numeric',
+            'shipping' => 'nullable|numeric',
+            'total' => 'required|numeric',
+            'paymentMethod' => 'required|string',
+            'products' => 'required|array',
+            'products.*.serial' => 'required|string',
+            'products.*.name' => 'required|string',
+            'products.*.description' => 'nullable|string',
+            'products.*.qty' => 'required|integer',
+            'products.*.rate' => 'required|numeric',
+            'products.*.amount' => 'required|numeric',
+        ]);
+
         DB::beginTransaction(); // Start transaction
 
         try {

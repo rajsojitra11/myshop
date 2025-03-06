@@ -21,7 +21,6 @@ class Invoice extends Model
         'total',
         'payment_method'
     ];
-
     public function customer()
     {
         return $this->belongsTo(Customer::class);

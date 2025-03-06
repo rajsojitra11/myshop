@@ -22,21 +22,23 @@
         <div id="productModal" class="modal-overlay">
             <div class="modal-content">
                 <h2 class="modal-title">Add New Product</h2>
-                <form id="productForm">
+                <form action="{{ route('pstore') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
                     <label class="form-label">Code:</label>
-                    <input type="text" id="codee" class="form-input" required>
-
+                    <input type="text" name="code" class="form-input" required>
+                
                     <label class="form-label">Name:</label>
-                    <input type="text" id="namee" class="form-input" required>
-
+                    <input type="text" name="name" class="form-input" required>
+                
                     <label class="form-label">Price:</label>
-                    <input type="number" id="pricee" class="form-input" required>
-                                       
+                    <input type="number" name="price" class="form-input" required>
+                
                     <label class="form-label">Quantity:</label>
-                    <input type="number" id="qtye" class="form-input" required>
-                    
+                    <input type="number" name="quantity" class="form-input" required>
+                
                     <label class="form-label">Image:</label>
-                    <input type="file" id="file" class="form-input" required>
+                    <input type="file" name="image" class="form-input" required>
+                
                     <div class="modal-actions">
                         <button type="button" onclick="closeModal()" class="cancel-btn">Cancel</button>
                         <button type="submit" class="save-btn">Save</button>
