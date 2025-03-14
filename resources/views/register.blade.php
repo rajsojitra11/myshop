@@ -23,7 +23,7 @@
   
           <!-- First Name -->
           <div class="input-group">
-            <label for="firstname">First Name</label>
+            <label for="firstname">Enter Name</label>
             <input type="text" id="firstname" name="firstname" required />
           </div>
   

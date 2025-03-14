@@ -4,9 +4,23 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+    /**
+     * Display a listing of products.
+     */
+    public function index()
+    {
+        $products = Product::all(); // Fetch all products from the database
+        return view('admin.product', compact('products')); // Pass products to the view
+
+    }
+
+    /**
+     * Store a newly created product in storage.
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -32,6 +46,23 @@ class ProductController extends Controller
             'image'     => $imagePath
         ]);
 
-        return response()->json(['success' => 'Product added successfully!']);
+        return redirect()->route('product.index')->with('success', 'Product added successfully!');
+    }
+
+    /**
+     * Remove the specified product from storage.
+     */
+    public function destroy($id)
+    {
+        $product = Product::findOrFail($id);
+
+        // Delete image from storage
+        if ($product->image) {
+            Storage::disk('public')->delete($product->image);
+        }
+
+        $product->delete();
+
+        return redirect()->route('product.index')->with('success', 'Product deleted successfully!');
     }
 }

@@ -11,10 +11,7 @@ class UserController extends Controller
     {
         return view('admin.dashboard');
     }
-    public function login()
-    {
-        return view('login');
-    }
+
     public function register()
     {
         return view('register');

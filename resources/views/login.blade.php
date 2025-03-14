@@ -17,6 +17,7 @@
         <p></p>
 
         <form action="{{Route('login')}}" method="POST">
+          @csrf
           <div class="input-group">
             <label for="username">Username or email</label>
             <input type="text" id="username" name="username" required />
