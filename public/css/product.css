@@ -9,12 +9,27 @@
     margin: auto;
     padding: 2px;
 }
+
 .product {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     height: 100%;
+    background: white;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: relative;
+}
+
+.product img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
 }
 
 .product-details {
@@ -26,6 +41,17 @@
 .edit-button {
     width: 100%;
     margin-top: auto;
+    background: #cf9e32;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.edit-button:hover {
+    background: #b0b300;
 }
 
 /* Responsive Adjustments */
@@ -46,79 +72,11 @@
         grid-template-columns: repeat(2, 1fr);
     }
 }
-/* ========================= */
-/* Product Card Styles */
-/* ========================= */
-.product {
-    background: white;
-    padding: 16px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    position: relative;
-    z-index: 1;
-}
-
-.product img {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 10px;
-}
 
 /* ========================= */
 /* Buttons */
 /* ========================= */
-.edit-button {
-    background: #cf9e32;
-    color: white;
-    padding: 6px 12px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    z-index: 10; /* Ensure edit buttons are clickable */
-}
-
-/* FIX: Ensure edit-button hover works after opening/closing modal */
-.edit-button:hover {
-    background: #b0b300;
-}
-
-/* Ensure edit buttons are interactable when modal is closed */
-.modal-overlay:not(.show) + .edit-button {
-    pointer-events: auto;
-}
-/* ========================= */
-/* Animation for Modal */
-/* ========================= */
-@keyframes modalFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-/* ========================= */
-/* Mobile Responsiveness */
-/* ========================= */
-@media (max-width: 480px) {
-    .modal-content {
-        width: 90%;
-        margin-top: 20px;
-    }
-
-    .edit-button {
-        padding: 10px 15px;
-    }
-}
-
-/* Add Product Button */
-button.btn-success {
+.btn-success {
     background-color: #4caf50;
     color: white;
     padding: 8px 10px;
@@ -130,12 +88,12 @@ button.btn-success {
     margin-bottom: 10px;
 }
 
-button.btn-success:hover {
+.btn-success:hover {
     background-color: #45a049;
 }
 
 /* ========================= */
-/* Search Bar Fix */
+/* Search Bar */
 /* ========================= */
 .input-group {
     display: flex;
@@ -144,9 +102,9 @@ button.btn-success:hover {
     max-width: 600px;
     width: 100%;
     position: relative;
-    z-index: 2000; /* Default high z-index */
-    transition: opacity 0.3s ease;
+    z-index: 10;
 }
+
 .input-group input {
     flex-grow: 1;
     padding: 10px;
@@ -169,15 +127,8 @@ button.btn-success:hover {
     font-size: 16px;
 }
 
-/* Show modal when active */
-.modal-overlay.show {
-    opacity: 1;
-    pointer-events: all;
-    display: flex;
-}
-
 /* ========================= */
-/* Modal Content Fix */
+/* Modal Overlay */
 /* ========================= */
 .modal-overlay {
     position: fixed;
@@ -185,17 +136,17 @@ button.btn-success:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    background: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(5px);
-    display: none; /* Initially hidden */
+    display: none;
     justify-content: center;
     align-items: center;
-    z-index: 5000;
+    z-index: 1000;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s ease, pointer-events 0s ease 0.3s;
+    transition: opacity 0.3s ease;
 }
-/* Show modal when active */
+
 .modal-overlay.show {
     opacity: 1;
     pointer-events: all;
@@ -203,7 +154,7 @@ button.btn-success:hover {
 }
 
 /* ========================= */
-/* Modal Content Styles */
+/* Modal Content */
 /* ========================= */
 .modal-content {
     background-color: #fff;
@@ -213,15 +164,20 @@ button.btn-success:hover {
     width: 90%;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
     position: relative;
-    z-index: 5001;
-    animation: modalFadeIn 0.3s ease-out;
+    z-index: 1001;
+    animation: fadeIn 0.3s ease-in-out;
 }
 
-/* Modal Title */
-.modal-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 15px;
+/* Fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Form Inputs */
@@ -242,9 +198,7 @@ button.btn-success:hover {
     margin-top: 20px;
 }
 
-/* ========================= */
 /* Buttons Inside Modal */
-/* ========================= */
 .cancel-btn,
 .save-btn {
     padding: 12px 20px;
@@ -286,34 +240,69 @@ button.btn-success:hover {
 /* Mobile Responsiveness */
 /* ========================= */
 @media (max-width: 480px) {
+    .modal-content {
+        width: 90%;
+        margin-top: 20px;
+    }
+
     .input-group input,
     .input-group button {
         padding: 8px;
         font-size: 12px;
     }
 
-    .modal-content {
-        width: 90%;
-        margin-top: 20px;
-    }
-
-    button.btn-success {
+    .btn-success {
         padding: 10px 15px;
     }
 }
 
-/* Lower search bar when modal is open */
+/* Ensure modal overlay is above all elements */
 .modal-open .input-group {
-    z-index: 100 !important; /* Push search bar below modal */
-    opacity: 0.3; /* Optional: Fades it out */
-    pointer-events: none; /* Disables interaction */
-}
-
-/* Ensure buttons inside modal work */
-.modal-content button {
-    pointer-events: auto !important;
+    z-index: 1; /* Push search bar below modal */
+    opacity: 0.3;
+    pointer-events: none;
 }
 
 /* ========================= */
-/* Modal Animation */
+/* Utility Buttons */
 /* ========================= */
+.bg-blue-500 {
+    background-color: #007bff;
+    color: white;
+}
+
+.bg-blue-500:hover {
+    background-color: #0056b3;
+}
+
+.bg-red-500 {
+    background-color: #dc3545;
+    color: white;
+}
+
+.bg-red-500:hover {
+    background-color: #c82333;
+}
+
+.bg-green-500 {
+    background-color: #28a745;
+    color: white;
+}
+
+.bg-green-500:hover {
+    background-color: #218838;
+}
+
+.bg-gray-500 {
+    background-color: #6c757d;
+    color: white;
+}
+
+.bg-gray-500:hover {
+    background-color: #5a6268;
+}
+
+/* Scale effect on hover */
+button:hover {
+    transform: scale(1.05);
+}

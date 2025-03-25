@@ -87,4 +87,28 @@ class ProductController extends Controller
 
         return redirect()->route('product.index')->with('success', 'Product deleted successfully!');
     }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'code' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+        ]);
+
+        $product = Product::findOrFail($id);
+
+        // Ensure the user can only update their own products
+        if ($product->uid !== Auth::id()) {
+            return redirect()->route('product.index')->with('error', 'Unauthorized action.');
+        }
+
+        $product->update([
+            'code' => $request->code,
+            'name' => $request->name,
+            'price' => $request->price,
+        ]);
+
+        return redirect()->route('product.index')->with('success', 'Product updated successfully!');
+    }
 }
