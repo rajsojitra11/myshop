@@ -336,18 +336,19 @@ button:hover {
     position: relative;
     z-index: 1002;
     animation: fadeIn 0.3s ease-in-out;
+    margin-top: 100px;
 }
 
 /* Ensure form elements are properly spaced */
 .modal-content label {
     font-weight: bold;
-    margin-top: 10px;
+    margin-top: 2px;
     display: block;
 }
 
 .modal-content input {
     width: 100%;
-    padding: 10px;
+    padding: 7px;
     margin-top: 5px;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -364,21 +365,25 @@ button:hover {
 /* Ensure buttons are aligned properly */
 .cancel-btn,
 .save-btn {
-    padding: 12px 20px;
+    padding: 10px 16px;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-size: 16px;
+    font-size: 18px;
     border: none;
 }
 
 .cancel-btn {
     background-color: #f44336;
+    width: 150px;
+    height: 45px;
     color: white;
 }
 
 .save-btn {
     background-color: #4caf50;
+    width: 150px;
+    height: 45px;
     color: white;
 }
 
