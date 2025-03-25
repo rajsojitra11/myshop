@@ -51,7 +51,7 @@
               <div class="icon">
                 <i class="fas fa-clipboard-list"></i>
               </div>
-              <a href="{{Route('product')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{Route('product.index')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->

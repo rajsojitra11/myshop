@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\user;
+
 
 class ProfileController extends Controller
 {
@@ -36,7 +38,7 @@ class ProfileController extends Controller
             }
         }
 
-        $user->save();
+        // $user->save();
 
         return back()->with('success', 'Profile updated successfully!');
     }
