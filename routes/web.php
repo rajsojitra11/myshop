@@ -8,6 +8,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 Route::post('registers', [RegisterController::class, 'register'])->name('registers');
@@ -24,7 +25,7 @@ Route::get('viewprofile', [UserController::class, 'viewprofile'])->name('viewpro
 
 
 Route::post('invoice', [InvoiceController::class, 'store'])->name('invoice');
-
+Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update')->middleware('auth');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/products', [ProductController::class, 'index'])->name('product.index');
