@@ -38,22 +38,6 @@
     width: 100%;
 }
 
-.edit-button {
-    width: 100%;
-    margin-top: auto;
-    background: #cf9e32;
-    color: white;
-    padding: 6px 12px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.edit-button:hover {
-    background: #b0b300;
-}
-
 /* Responsive Adjustments */
 @media (max-width: 1024px) {
     .product-grid {
@@ -305,4 +289,112 @@
 /* Scale effect on hover */
 button:hover {
     transform: scale(1.05);
+}
+
+/* Ensure buttons are in the same line */
+.product .action-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px; /* Adjust spacing */
+    width: 100%;
+}
+
+/* ========================= */
+/* Fix Edit Modal */
+/* ========================= */
+#editProductModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+#editProductModal.show {
+    opacity: 1;
+    pointer-events: all;
+    display: flex;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1002;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Ensure form elements are properly spaced */
+.modal-content label {
+    font-weight: bold;
+    margin-top: 10px;
+    display: block;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+/* Fix Button Alignment */
+.modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+/* Ensure buttons are aligned properly */
+.cancel-btn,
+.save-btn {
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    border: none;
+}
+
+.cancel-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.save-btn {
+    background-color: #4caf50;
+    color: white;
+}
+
+/* Close Button */
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    color: #333;
+    font-size: 18px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-btn:hover {
+    color: #ff6b6b;
 }

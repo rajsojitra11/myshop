@@ -65,21 +65,27 @@
                     <div><label class="font-bold">Code:</label> {{ $product->code }}</div>
                     <div><label class="font-bold">Name:</label> {{ $product->name }}</div>
                     <div><label class="font-bold">Price:</label> ₹{{ $product->price }}</div>
+                    <div><label class="font-bold">Quantity:</label>{{ $product->stock_quantity }}</div>
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="mt-4 flex items-center gap-2 flex-nowrap w-full">
+                <div class="action-buttons">
                     <!-- Edit Button -->
-                    <button onclick="openEditModal({{ $product->id }}, '{{ $product->code }}', '{{ $product->name }}', {{ $product->price }})"
-                            class="bg-blue-500 text-white px-4 py-2 rounded">Edit</button>
-
+                    <button onclick="openEditModal({{ $product->id }}, '{{ $product->code }}', '{{ $product->name }}', {{ $product->price }}, {{ $product->stock_quantity }})"
+                        class="bg-blue-500 text-white text-xs px-3 py-1 rounded">
+                        Edit
+                    </button>
+                
                     <!-- Delete Button -->
                     <form action="{{ route('product.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Are you sure?');">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">Delete</button>
+                        <button type="submit" class="bg-red-500 text-white text-xs px-3 py-1 rounded">
+                            Delete
+                        </button>
                     </form>
                 </div>
+                        
             </div>
         @endforeach
     @else
@@ -107,7 +113,7 @@
             <input type="number" id="editProductPrice" name="price" class="w-full p-2 border rounded">
 
             <label class="block mt-2">Quantity:</label>
-<input type="number" id="editProductQuantity" name="quantity" class="w-full p-2 border rounded">
+            <input type="number" id="editProductQuantity" name="quantity" class="w-full p-2 border rounded">
 
 
             <div class="mt-4 flex justify-between">
@@ -118,105 +124,90 @@
     </div>
 </div>
 </div>
-
 <script>
-   function openEditModal(id, code, name, price, quantity) {
-    document.getElementById('editProductId').value = id;
-    document.getElementById('editProductCode').value = code;
-    document.getElementById('editProductName').value = name;
-    document.getElementById('editProductPrice').value = price;
-    document.getElementById('editProductQuantity').value = quantity; // Corrected ID and Value
+document.addEventListener("DOMContentLoaded", function () {
 
-    document.getElementById('editProductForm').action = "/products/" + id;
-
-    // Show the modal
-    const modal = document.getElementById('editProductModal');
-    modal.style.display = "flex";
-    modal.classList.add('show');
-    document.body.classList.add('modal-open');
-}
-
-// Close Update Form
-function closeEditModal() {
-    const modal = document.getElementById('editProductModal');
-    modal.style.display = "none";
-    modal.classList.remove('show');
-    document.body.classList.remove('modal-open');
-}
-
-
-    // Close modal when clicking outside the content
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("productModal").addEventListener("click", function (event) {
-            if (event.target.classList.contains("modal-overlay")) {
-                closeModal();
-            }
-        });
-
-        // Search Products
-        document.getElementById("supplierSearch").addEventListener("input", function () {
-            let input = this.value.toLowerCase();
-            let products = document.querySelectorAll(".product");
-
-            products.forEach(product => {
-                let productText = product.querySelector(".product-details").textContent.toLowerCase();
-                product.style.display = productText.includes(input) ? "block" : "none";
-            });
-        });
-    });
-</script>
-<script>
+    /** ===========================
+     *  Open & Close Edit Product Modal
+     *  =========================== */
     function openEditModal(id, code, name, price, quantity) {
         document.getElementById('editProductId').value = id;
         document.getElementById('editProductCode').value = code;
         document.getElementById('editProductName').value = name;
         document.getElementById('editProductPrice').value = price;
-        document.getElementById('editProductQuantity').value = quantity; // Fixed ID
- 
+        document.getElementById('editProductQuantity').value = quantity;
+
         document.getElementById('editProductForm').action = "/products/" + id;
- 
-        // Show the modal
+
         const modal = document.getElementById('editProductModal');
         modal.style.display = "flex";
         modal.classList.add('show');
         document.body.classList.add('modal-open');
     }
- 
-    // Close Update Form
+
     function closeEditModal() {
         const modal = document.getElementById('editProductModal');
         modal.style.display = "none";
         modal.classList.remove('show');
         document.body.classList.remove('modal-open');
     }
- 
-    // Close modal when clicking outside the content
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("productModal").addEventListener("click", function (event) {
-            if (event.target.classList.contains("modal-overlay")) {
-                closeModal();
-            }
-        });
- 
-        document.getElementById("editProductModal").addEventListener("click", function (event) {
-            if (event.target.classList.contains("modal-overlay")) {
-                closeEditModal();
-            }
-        });
- 
-        // Search Products
-        document.getElementById("supplierSearch").addEventListener("input", function () {
-            let input = this.value.toLowerCase();
-            let products = document.querySelectorAll(".product");
- 
-            products.forEach(product => {
-                let productText = product.querySelector(".product-details").textContent.toLowerCase();
-                product.style.display = productText.includes(input) ? "block" : "none";
-            });
+
+    // Close Edit Modal when clicking outside
+    document.getElementById("editProductModal").addEventListener("click", function (event) {
+        if (event.target.classList.contains("modal-overlay")) {
+            closeEditModal();
+        }
+    });
+
+    /** ===========================
+     *  Open & Close Product Modal
+     *  =========================== */
+    function openModal() {
+        const modalOverlay = document.getElementById("productModal");
+        modalOverlay.classList.add("show");
+        modalOverlay.style.display = "flex";
+        document.body.classList.add("modal-open");
+        setTimeout(() => {
+            modalOverlay.style.pointerEvents = "auto";
+        }, 300);
+    }
+
+    function closeModal() {
+        const modalOverlay = document.getElementById("productModal");
+        modalOverlay.classList.remove("show");
+        modalOverlay.style.display = "none";
+        document.body.classList.remove("modal-open");
+    }
+
+    // Close Product Modal when clicking outside
+    document.getElementById("productModal").addEventListener("click", function (event) {
+        if (event.target.classList.contains("modal-overlay")) {
+            closeModal();
+        }
+    });
+
+    /** ===========================
+     *  Search Product Functionality
+     *  =========================== */
+    document.getElementById("supplierSearch").addEventListener("input", function () {
+        let input = this.value.toLowerCase();
+        let products = document.querySelectorAll(".product");
+
+        products.forEach(product => {
+            let productText = product.querySelector(".product-details").textContent.toLowerCase();
+            product.style.display = productText.includes(input) ? "block" : "none";
         });
     });
- </script>
- 
-    
+
+    /** ===========================
+     *  Expose Functions Globally
+     *  =========================== */
+    window.openEditModal = openEditModal;
+    window.closeEditModal = closeEditModal;
+    window.openModal = openModal;
+    window.closeModal = closeModal;
+});
+</script>
+
 
 @endsection  

@@ -107,6 +107,7 @@ class ProductController extends Controller
             'code' => $request->code,
             'name' => $request->name,
             'price' => $request->price,
+            'stock_quantity' => $request->quantity,
         ]);
 
         return redirect()->route('product.index')->with('success', 'Product updated successfully!');
