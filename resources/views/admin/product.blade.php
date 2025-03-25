@@ -53,7 +53,7 @@
 
     <!-- Product Grid -->
     <div class="product-grid grid grid-cols-3 gap-4 mt-6" id="productGrid">
-        @if($products->count() > 0)  {{-- ✅ Fix: Check count() instead of isEmpty() --}}
+        @if($products->count() > 0) 
             @foreach($products as $product)
                 <div class="product">
                     <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default.png') }}" 

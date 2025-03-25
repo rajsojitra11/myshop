@@ -2,20 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+
     /**
      * Display a listing of products.
      */
     public function index()
     {
-        $products = Product::all(); // Fetch all products from the database
-        return view('admin.product', compact('products')); // Pass products to the view
+        $user = Auth::user(); // Get the logged-in user
+        Log::info("User accessing products: " . $user->id);
 
+        $products = Product::where('uid', $user->id)->get(); // Fetch only user's products
+
+        return view('admin.product', compact('products'));
     }
 
     /**
@@ -23,13 +29,21 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        // Validate input fields
         $request->validate([
             'code'      => 'required|unique:products,code',
             'name'      => 'required|string|max:255',
-            'price'     => 'required|numeric',
-            'quantity'  => 'required|integer',
+            'price'     => 'required|numeric|min:0',
+            'quantity'  => 'required|integer|min:1',
             'image'     => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
+
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'You must be logged in to add a product.');
+        }
+
+        Log::info("Logged in user ID: " . $user->id);
 
         // Handle file upload
         $imagePath = null;
@@ -37,14 +51,17 @@ class ProductController extends Controller
             $imagePath = $request->file('image')->store('products', 'public');
         }
 
-        // Insert into database
-        Product::create([
-            'code'      => $request->code,
-            'name'      => $request->name,
-            'price'     => $request->price,
+        // Insert product with logged-in user's ID
+        $product = Product::create([
+            'code'           => $request->code,
+            'name'           => $request->name,
+            'price'          => $request->price,
             'stock_quantity' => $request->quantity,
-            'image'     => $imagePath
+            'image'          => $imagePath,
+            'uid'            => $user->id,
         ]);
+
+        Log::info("Product created successfully: ", $product->toArray());
 
         return redirect()->route('product.index')->with('success', 'Product added successfully!');
     }
@@ -55,6 +72,11 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
+
+        // Ensure the user can only delete their own products
+        if ($product->uid !== Auth::id()) {
+            return redirect()->route('product.index')->with('error', 'Unauthorized action.');
+        }
 
         // Delete image from storage
         if ($product->image) {

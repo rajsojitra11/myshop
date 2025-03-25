@@ -250,7 +250,7 @@
           </li>
         </li>
         <li class="nav-item">
-          <a href="{{Route('products')}}" class="nav-link">
+          <a href="{{Route('product.index')}}" class="nav-link">
             <i class="nav-icon fas fa-cubes"></i>
             <p>
               Product

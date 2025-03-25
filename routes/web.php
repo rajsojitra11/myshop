@@ -26,7 +26,8 @@ Route::get('viewprofile', [UserController::class, 'viewprofile'])->name('viewpro
 Route::post('invoice', [InvoiceController::class, 'store'])->name('invoice');
 
 
-Route::get('products', [ProductController::class, 'index'])->name('products.index');
-Route::get('products', [ProductController::class, 'index'])->name('products');
-Route::post('products', [ProductController::class, 'store'])->name('product.store');
-Route::delete('products/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/products', [ProductController::class, 'index'])->name('product.index');
+    Route::post('/products', [ProductController::class, 'store'])->name('product.store');
+    Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
+});
