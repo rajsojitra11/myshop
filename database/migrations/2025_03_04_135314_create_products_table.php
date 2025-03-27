@@ -9,18 +9,26 @@ return new class extends Migration {
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique();  // Ensure 'code' column exists
+            $table->string('code')->unique();
             $table->string('name');
             $table->decimal('price', 10, 2);
             $table->integer('stock_quantity');
             $table->string('image')->nullable();
             $table->timestamps();
         });
-    }
 
+        Schema::table('products', function (Blueprint $table) {
+            $table->foreignId('uid')->nullable()->after('id')->constrained('users')->onDelete('cascade');
+        });
+    }
 
     public function down(): void
     {
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropForeign(['uid']);
+            $table->dropColumn('uid');
+        });
+
         Schema::dropIfExists('products');
     }
 };
