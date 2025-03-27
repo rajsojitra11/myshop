@@ -10,8 +10,8 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 
-Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 Route::post('registers', [RegisterController::class, 'register'])->name('registers');
+Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
 Route::get('register', [UserController::class, 'register'])->name('register');
@@ -25,6 +25,7 @@ Route::get('viewprofile', [UserController::class, 'viewprofile'])->name('viewpro
 
 
 Route::post('invoice', [InvoiceController::class, 'store'])->name('invoice');
+
 Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update')->middleware('auth');
 
 Route::middleware(['auth'])->group(function () {

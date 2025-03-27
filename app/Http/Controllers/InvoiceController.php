@@ -29,12 +29,9 @@ class InvoiceController extends Controller
             'total' => 'required|numeric',
             'paymentMethod' => 'required|string',
             'products' => 'required|array',
-            'products.*.serial' => 'required|string',
-            'products.*.name' => 'required|string',
-            'products.*.description' => 'nullable|string',
-            'products.*.qty' => 'required|integer',
-            'products.*.rate' => 'required|numeric',
-            'products.*.amount' => 'required|numeric',
+            'products.*.product_id' => 'required|exists:products,id', // Validate product exists
+            'products.*.quantity' => 'required|integer',
+            'products.*.price' => 'required|numeric',
         ]);
 
         DB::beginTransaction(); // Start transaction
@@ -66,12 +63,9 @@ class InvoiceController extends Controller
             foreach ($request->products as $product) {
                 InvoiceProduct::create([
                     'invoice_id'  => $invoice->id,
-                    'serial'      => $product['serial'],
-                    'name'        => $product['name'],
-                    'description' => $product['description'],
-                    'qty'         => $product['qty'],
-                    'rate'        => $product['rate'],
-                    'amount'      => $product['amount'],
+                    'product_id'  => $product['product_id'], // Ensure this matches the migration
+                    'quantity'    => $product['quantity'],
+                    'price'       => $product['price'],
                 ]);
             }
 

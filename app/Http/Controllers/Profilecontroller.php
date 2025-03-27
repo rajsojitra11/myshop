@@ -5,17 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\user;
-
+use App\Models\User;
 
 class ProfileController extends Controller
 {
     public function updateProfile(Request $request)
     {
-        $user = Auth::user(); // Get logged-in user
+        $user = Auth::user();
 
         if (!$user) {
-            return back()->withErrors(['error' => 'User not found']);
+            return redirect()->back()->with('error', 'User not found!');
         }
 
         $request->validate([
@@ -25,21 +24,31 @@ class ProfileController extends Controller
             'new_password' => 'nullable|string|min:6',
         ]);
 
-        // Update Name & Email
-        $user->name = $request->name;
-        $user->email = $request->email;
+        $dataChanged = false;
 
-        // Password Update
-        if ($request->old_password && $request->new_password) {
-            if (Hash::check($request->old_password, $user->password)) {
-                $user->password = Hash::make($request->new_password);
-            } else {
-                return back()->withErrors(['old_password' => 'Old password is incorrect']);
-            }
+        // Check if Name or Email has changed
+        if ($user->name !== $request->name || $user->email !== $request->email) {
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $dataChanged = true;
         }
 
-        // $user->save();
+        // Password Update
+        if ($request->filled('old_password') && $request->filled('new_password')) {
+            if (!Hash::check($request->old_password, $user->password)) {
+                return redirect()->back()->with('error', 'Old password is incorrect!');
+            }
 
-        return back()->with('success', 'Profile updated successfully!');
+            $user->password = Hash::make($request->new_password);
+            $dataChanged = true;
+        }
+
+        // Only save if there were changes
+        if ($dataChanged) {
+            $user->save();
+            return redirect()->back()->with('success', 'Profile updated successfully!');
+        } else {
+            return redirect()->back()->with('error', 'No changes were made.');
+        }
     }
 }

@@ -124,6 +124,52 @@
     </div>
 </div>
 </div>
+
+
+
+
+<!-- SweetAlert2 for Success Message -->
+@if(session('psuccess'))
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                title: "Success!",
+                text: "{{ session('psuccess') }}",
+                icon: "success",
+                confirmButtonText: "OK"
+            });
+        });
+    </script>
+@endif
+
+@if(session('pasuccess'))
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                title: "Success!",
+                text: "{{ session('pasuccess') }}",
+                icon: "success",
+                confirmButtonText: "OK"
+            });
+        });
+    </script>
+@endif
+
+@if(session('pdsuccess'))
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                title: "Success!",
+                text: "{{ session('pdsuccess') }}",
+                icon: "success",
+                confirmButtonText: "OK"
+            });
+        });
+    </script>
+@endif
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 

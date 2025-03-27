@@ -63,7 +63,7 @@ class ProductController extends Controller
 
         Log::info("Product created successfully: ", $product->toArray());
 
-        return redirect()->route('product.index')->with('success', 'Product added successfully!');
+        return redirect()->route('product.index')->with('pasuccess', 'Product added successfully!');
     }
 
     /**
@@ -85,7 +85,7 @@ class ProductController extends Controller
 
         $product->delete();
 
-        return redirect()->route('product.index')->with('success', 'Product deleted successfully!');
+        return redirect()->route('product.index')->with('pdsuccess', 'Product deleted successfully!');
     }
 
     public function update(Request $request, $id)
@@ -110,6 +110,6 @@ class ProductController extends Controller
             'stock_quantity' => $request->quantity,
         ]);
 
-        return redirect()->route('product.index')->with('success', 'Product updated successfully!');
+        return redirect()->route('product.index')->with('psuccess', 'Product updated successfully!');
     }
 }

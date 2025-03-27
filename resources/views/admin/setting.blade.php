@@ -43,4 +43,35 @@
   <!-- /.card-body -->
 </div>
 
+<!-- SweetAlert2 for Success Message -->
+@if(session('success'))
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                title: "Success!",
+                text: "{{ session('success') }}",
+                icon: "success",
+                confirmButtonText: "OK"
+            });
+        });
+    </script>
+@endif
+
+
+@if(session('error'))
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            setTimeout(() => {
+                Swal.fire({
+                    title: "Warning!",
+                    text: "{{ session('error') }}",
+                    icon: "warning",
+                    confirmButtonText: "OK"
+                });
+            }, 300); // Small delay to ensure session data is loaded
+        });
+    </script>
+@endif
 @endsection
