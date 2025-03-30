@@ -10,6 +10,11 @@ class UserController extends Controller
     //
     public function dashboard()
     {
+        if (!session('user')) {
+            return redirect()->route('login');
+        }
+
+
         return view('admin.dashboard');
     }
 
@@ -35,6 +40,9 @@ class UserController extends Controller
     }
     public function setting()
     {
+        if (!session('user')) {
+            return redirect()->route('login');
+        }
         return view('admin.setting');
     }
     public function viewprofile()

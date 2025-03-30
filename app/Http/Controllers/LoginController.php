@@ -29,7 +29,7 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             Session::put('user', $user);
-            return redirect()->route('dashboard');
+            return redirect()->route('dashboard')->with('users');
         }
 
         return back()->withErrors(['login_error' => 'Invalid credentials.'])->withInput();
