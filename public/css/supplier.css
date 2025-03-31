@@ -38,22 +38,39 @@
     width: 100%;
 }
 
+/* ========================= */
 /* Responsive Adjustments */
+/* ========================= */
+
+/* On large screens (1024px+) */
+@media (max-width: 1200px) {
+    .product-grid {
+        grid-template-columns: repeat(4, 1fr); /* 4 columns */
+    }
+}
+
+/* On tablet screens (768px - 1024px) */
 @media (max-width: 1024px) {
     .product-grid {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr); /* 3 columns */
     }
 }
 
+/* On small tablets & large mobiles (480px - 768px) */
 @media (max-width: 768px) {
     .product-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr); /* 2 columns */
     }
 }
 
+/* On very small screens (480px and below) */
 @media (max-width: 480px) {
     .product-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr; /* 1 column */
+    }
+
+    .product img {
+        height: 100px; /* Reduce image size for small screens */
     }
 }
 

@@ -11,22 +11,16 @@ use Illuminate\Support\Facades\Storage;
 class ProductController extends Controller
 {
 
-    /**
-     * Display a listing of products.
-     */
     public function index()
     {
-        $user = Auth::user(); // Get the logged-in user
+        $user = Auth::user();
         Log::info("User accessing products: " . $user->id);
 
-        $products = Product::where('uid', $user->id)->get(); // Fetch only user's products
+        $products = Product::where('uid', $user->id)->get();
 
         return view('admin.product', compact('products'));
     }
 
-    /**
-     * Store a newly created product in storage.
-     */
     public function store(Request $request)
     {
         // Validate input fields
@@ -45,13 +39,12 @@ class ProductController extends Controller
 
         Log::info("Logged in user ID: " . $user->id);
 
-        // Handle file upload
         $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('products', 'public');
         }
 
-        // Insert product with logged-in user's ID
+
         $product = Product::create([
             'code'           => $request->code,
             'name'           => $request->name,
@@ -66,19 +59,17 @@ class ProductController extends Controller
         return redirect()->route('product.index')->with('pasuccess', 'Product added successfully!');
     }
 
-    /**
-     * Remove the specified product from storage.
-     */
+
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
 
-        // Ensure the user can only delete their own products
+
         if ($product->uid !== Auth::id()) {
             return redirect()->route('product.index')->with('error', 'Unauthorized action.');
         }
 
-        // Delete image from storage
+
         if ($product->image) {
             Storage::disk('public')->delete($product->image);
         }
@@ -98,7 +89,7 @@ class ProductController extends Controller
 
         $product = Product::findOrFail($id);
 
-        // Ensure the user can only update their own products
+
         if ($product->uid !== Auth::id()) {
             return redirect()->route('product.index')->with('error', 'Unauthorized action.');
         }

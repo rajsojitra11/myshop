@@ -9,11 +9,14 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SupplierController;
 
 Route::post('registers', [RegisterController::class, 'register'])->name('registers');
+Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
-Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('login', [LoginController::class, 'login']);
+
+
 Route::get('register', [UserController::class, 'register'])->name('register');
 Route::get('dashboard', [UserController::class, 'dashboard'])->name('dashboard');
 Route::get('product', [UserController::class, 'product'])->name('product');
@@ -26,7 +29,10 @@ Route::get('viewprofile', [UserController::class, 'viewprofile'])->name('viewpro
 
 Route::post('invoice', [InvoiceController::class, 'store'])->name('invoice');
 
+
 Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update')->middleware('auth');
+
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/products', [ProductController::class, 'index'])->name('product.index');
@@ -34,3 +40,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
     Route::put('/products/{id}', [ProductController::class, 'update'])->name('product.update');
 });
+
+
+
+Route::post('/suppliers/store', [SupplierController::class, 'store'])->name('suppliers.store');

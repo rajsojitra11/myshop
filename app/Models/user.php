@@ -11,14 +11,13 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $table = 'users'; // Table name
+    protected $table = 'users';
 
-    protected $primaryKey = 'id'; // Custom primary key field
+    protected $primaryKey = 'id';
 
-    public $incrementing = true; // Auto-incrementing primary key
+    public $incrementing = true;
 
-    protected $keyType = 'int'; // Primary key data type
-
+    protected $keyType = 'int';
     protected $fillable = [
         'name',
         'email',
@@ -31,6 +30,6 @@ class User extends Authenticatable
     ];
 
     protected $casts = [
-        'password' => 'hashed', // Auto-hashes passwords (Laravel 10+)
+        'password' => 'hashed',
     ];
 }

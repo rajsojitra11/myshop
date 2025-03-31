@@ -26,14 +26,14 @@ class ProfileController extends Controller
 
         $dataChanged = false;
 
-        // Check if Name or Email has changed
+
         if ($user->name !== $request->name || $user->email !== $request->email) {
             $user->name = $request->name;
             $user->email = $request->email;
             $dataChanged = true;
         }
 
-        // Password Update
+
         if ($request->filled('old_password') && $request->filled('new_password')) {
             if (!Hash::check($request->old_password, $user->password)) {
                 return redirect()->back()->with('error', 'Old password is incorrect!');
@@ -43,7 +43,7 @@ class ProfileController extends Controller
             $dataChanged = true;
         }
 
-        // Only save if there were changes
+
         if ($dataChanged) {
             $user->save();
             return redirect()->back()->with('success', 'Profile updated successfully!');

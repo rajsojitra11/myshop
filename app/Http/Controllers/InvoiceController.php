@@ -13,7 +13,7 @@ class InvoiceController extends Controller
     //
     public function store(Request $request)
     {
-        // Validate request data
+
         $request->validate([
             'to_name' => 'required|string',
             'to_address' => 'required|string',
@@ -29,15 +29,15 @@ class InvoiceController extends Controller
             'total' => 'required|numeric',
             'paymentMethod' => 'required|string',
             'products' => 'required|array',
-            'products.*.product_id' => 'required|exists:products,id', // Validate product exists
+            'products.*.product_id' => 'required|exists:products,id',
             'products.*.quantity' => 'required|integer',
             'products.*.price' => 'required|numeric',
         ]);
 
-        DB::beginTransaction(); // Start transaction
+        DB::beginTransaction();
 
         try {
-            // Create Customer
+
             $customer = Customer::create([
                 'name' => $request->to_name,
                 'address' => $request->to_address,
@@ -45,7 +45,7 @@ class InvoiceController extends Controller
                 'mobile_no' => $request->mobile_no,
             ]);
 
-            // Create Invoice
+
             $invoice = Invoice::create([
                 'customer_id'    => $customer->id,
                 'bill_no'        => $request->bill_no,
@@ -59,21 +59,20 @@ class InvoiceController extends Controller
                 'payment_method' => $request->paymentMethod,
             ]);
 
-            // Insert Products
             foreach ($request->products as $product) {
                 InvoiceProduct::create([
                     'invoice_id'  => $invoice->id,
-                    'product_id'  => $product['product_id'], // Ensure this matches the migration
+                    'product_id'  => $product['product_id'],
                     'quantity'    => $product['quantity'],
                     'price'       => $product['price'],
                 ]);
             }
 
-            DB::commit(); // Commit transaction
+            DB::commit();
 
             return redirect()->back()->with('success', 'Invoice created successfully!');
         } catch (\Exception $e) {
-            DB::rollback(); // Rollback on failure
+            DB::rollback();
             return back()->with('error', 'Error creating invoice: ' . $e->getMessage());
         }
     }
