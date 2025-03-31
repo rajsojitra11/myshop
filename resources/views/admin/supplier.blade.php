@@ -2,7 +2,7 @@
 @section('title', 'Supplier')
 @section('page-title', 'Supplier')
 @section('page', 'Supplier')
-<link rel="stylesheet" href="{{ asset('css/product.css') }}">
+<link rel="stylesheet" href="{{ asset('css/supplier.css') }}">
 @section('content')
   <!-- Default box -->
   {{-- <div class="card card-solid"> --}}
@@ -15,37 +15,50 @@
               </button>
           </div>
       </div>
-       <!-- Add Product Button -->
-    <button onclick="openModal()" class="btn btn-success mb-4">ADD PRODUCT</button>
+      <!-- Add Supplier Button -->
+<button onclick="openModal()" class="btn btn-success mb-4"  >ADD SUPPLIER</button>
 
-    <!-- Product Modal -->
-    <div id="productModal" class="modal-overlay">
-        <div class="modal-content">
-            <h2 class="modal-title">Add New Product</h2>
-            <form action="{{ route('product.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <label class="form-label">Code:</label>
-                <input type="text" name="code" class="form-input" required>
-
-                <label class="form-label">Name:</label>
-                <input type="text" name="name" class="form-input" required>
-
-                <label class="form-label">Price:</label>
-                <input type="number" name="price" class="form-input" required>
-
-                <label class="form-label">Quantity:</label>
-                <input type="number" name="quantity" class="form-input" required>
-
-                <label class="form-label">Image:</label>
-                <input type="file" name="image" class="form-input" required>
-
-                <div class="modal-actions">
-                    <button type="button" onclick="closeModal()" class="cancel-btn">Cancel</button>
-                    <button type="submit" class="save-btn">Save</button>
-                </div>
-            </form>
-        </div>
+<!-- Supplier Modal -->
+<div id="supplierModal" class="modal-overlay">
+    <div class="modal-content">
+        <h2 class="modal-title">Add Supplier</h2>
+        <br>
+        <form action="#" method="POST">
+            <table class="table table-bordered text-center">
+              <tbody>
+            
+                <tr>
+                  <th>Supplier ID</th>
+                  <td><input type="text" class="form-control" name="name" value="admin"></td>
+                  <th>Company Name</th>
+                  <td><input type="text" class="form-control" name="cname" value="admin"></td>
+                </tr>
+                <tr>
+                  <th>Email</th>
+                  <td><input type="email" class="form-control" name="email" ></td>
+                  <th>Address</th>
+                  <td><input type="text" class="form-control" name="address" ></td>
+                </tr>
+                <tr>
+                  <th>Contact No.</th>
+                  <td><input type="text" class="form-control" name="mobile"></td>
+                  <th>Country</th>
+                  <td><input type="text" class="form-control" name="country"></td>
+                </tr>
+                <tr>
+                  <th>Bank Details</th>
+                  <td><input type="text" class="form-control" name="bankdetails"></td>
+                  <th>Product Categories</th>
+                  <td><input type="text" class="form-control" name="productcategories"></td>
+                </tr>
+              </tbody>
+            </table>
+      
+            <a href="#" class="btn btn-primary btn-block"><i class=""></i>Save</a>
+          </form>
     </div>
+</div>
+
       <div class="container">
         <table class="table table-bordered table-hover">
             <thead class="thead-light">
@@ -127,8 +140,8 @@
 </script>
 
 <script>
-     function openModal() {
-        const modalOverlay = document.getElementById("productModal");
+    function openModal() {
+        const modalOverlay = document.getElementById("supplierModal"); // Correct ID
         modalOverlay.classList.add("show");
         modalOverlay.style.display = "flex";
         document.body.classList.add("modal-open");
@@ -138,21 +151,19 @@
     }
 
     function closeModal() {
-        const modalOverlay = document.getElementById("productModal");
+        const modalOverlay = document.getElementById("supplierModal"); // Correct ID
         modalOverlay.classList.remove("show");
         modalOverlay.style.display = "none";
         document.body.classList.remove("modal-open");
     }
 
-    // Close Product Modal when clicking outside
-    document.getElementById("productModal").addEventListener("click", function (event) {
+    // Close Supplier Modal when clicking outside
+    document.getElementById("supplierModal").addEventListener("click", function (event) {
         if (event.target.classList.contains("modal-overlay")) {
             closeModal();
         }
     });
-
-    </script>
-    
+</script>   
     
 @endsection
 

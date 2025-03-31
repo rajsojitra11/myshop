@@ -92,8 +92,6 @@
         <p>No products found.</p>
     @endif
 </div>
-
-<!-- Edit Product Modal -->
 <!-- Edit Product Modal -->
 <div id="editProductModal" class="modal-overlay">
     <div class="modal-content">
