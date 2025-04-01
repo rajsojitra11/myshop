@@ -8,6 +8,20 @@ use Illuminate\Support\Facades\Auth;
 
 class SupplierController extends Controller
 {
+
+    public function index()
+    {
+        $suppliers = Supplier::where('user_id', Auth::id())->get();
+        return view('admin.supplier', compact('suppliers'));
+    }
+
+    public function show($id)
+    {
+        $supplier = Supplier::findOrFail($id);
+        return view('admin.viewprofile', compact('supplier'));
+    }
+
+
     public function store(Request $request)
     {
         $request->validate([

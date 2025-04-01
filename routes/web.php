@@ -24,7 +24,7 @@ Route::get('supplier', [UserController::class, 'supplier'])->name('supplier');
 Route::get('customer', [UserController::class, 'customer'])->name('customer');
 Route::get('invoice', [UserController::class, 'invoice'])->name('invoice');
 Route::get('setting', [UserController::class, 'setting'])->name('setting');
-Route::get('viewprofile', [UserController::class, 'viewprofile'])->name('viewprofile');
+// Route::get('viewprofile', [UserController::class, 'viewprofile'])->name('viewprofile');
 
 
 Route::post('invoice', [InvoiceController::class, 'store'])->name('invoice');
@@ -42,5 +42,8 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-
-Route::post('/suppliers/store', [SupplierController::class, 'store'])->name('suppliers.store');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/supplier', [SupplierController::class, 'index'])->name('supplier');
+    Route::post('/suppliers/store', [SupplierController::class, 'store'])->name('suppliers.store');
+    Route::get('/supplier/{id}', [SupplierController::class, 'show'])->name('supplier.show');
+});

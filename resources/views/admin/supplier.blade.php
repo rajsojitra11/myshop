@@ -60,47 +60,34 @@
     </div>
 
     <div class="container">
-        <table class="table table-bordered table-hover">
-            <thead class="thead-light">
-                <tr>
-                    <th>Profile</th>
-                    <th>Name</th>
-                    <th>Company Name</th>
-                    <th>Product Categories</th>
-                    <th>Contact No.</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="supplierTableBody">
-                <!-- Example rows (replace with dynamic data) -->
-                <tr>
-                    <td class="text-center">
-                        <img src="../../dist/img/user1-128x128.jpg" alt="user-avatar" class="img-circle img-fluid" width="50">
-                    </td>
-                    <td><b>Raj Sojitra</b></td>
-                    <td>Web Designer / UX / Graphic Artist / Coffee Lover</td>
-                    <td>Demo Street 123, Demo City 04312, NJ</td>
-                    <td>846925846</td>
-                    <td class="text-center">
-                        <a href="{{Route('viewprofile')}}" class="btn btn-sm btn-primary">View Profile</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-center">
-                        <img src="../../dist/img/user2-160x160.jpg" alt="user-avatar" class="img-circle img-fluid" width="50">
-                    </td>
-                    <td><b>Nicole Pearson</b></td>
-                    <td>Web Designer / UX / Graphic Artist / Coffee Lover</td>
-                    <td>Demo Street 123, Demo City 04312, NJ</td>
-                    <td>2578954125</td>
-                    <td class="text-center">
-                        <a href="{{Route('viewprofile')}}" class="btn btn-sm btn-primary">View Profile</a>
-                    </td>
-                </tr>
-                <!-- Repeat similar rows for additional profiles -->
-            </tbody>
-        </table>
-    </div>
+      <table class="table table-bordered table-hover">
+          <thead class="thead-light">
+              <tr>
+                  <th>supplier id</th>
+                  <th>Company_name</th>
+                  <th>Email</th>
+                  <th>Category</th>
+                  <th>bank_details</th>
+                  <th>Actions</th>
+              </tr>
+          </thead>
+          <tbody id="supplierTableBody">
+              @foreach ($suppliers as $supplier)
+              <tr>
+                <td><b>{{ $supplier->supplier_id }}</b></td>
+                <td>{{ $supplier->company_name }}</td>
+                  <td>{{ $supplier->email }}</td>
+                  <td>{{ $supplier->product_categories }}</td>
+                  <td>{{ $supplier->bank_details }}</td>
+                  <td class="text-center">
+                      <a href="{{ route('supplier.show', $supplier->id) }}" class="btn btn-sm btn-primary">View Profile</a>
+                  </td>
+              </tr>
+              @endforeach
+          </tbody>
+      </table>
+  </div>
+  
 
     <!-- Pagination -->
     <div class="card-footer">
