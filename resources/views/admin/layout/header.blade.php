@@ -220,6 +220,15 @@
             
           </li>
           <li class="nav-item">
+            <a href="{{Route('expense')}}" class="nav-link">
+              <i class="nav-icon fas fa-wallet"></i>
+              <p>
+                Expense
+                <i class="right fas fa-angle"></i>
+              </p>
+            </a>            
+          </li>
+          <li class="nav-item">
             <a href="{{Route('supplier')}}" class="nav-link">
               <i class="nav-icon fas fa-handshake"></i>
               <p>

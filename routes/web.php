@@ -47,3 +47,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/suppliers/store', [SupplierController::class, 'store'])->name('suppliers.store');
     Route::get('/supplier/{id}', [SupplierController::class, 'show'])->name('supplier.show');
 });
+
+
+Route::get('expense', function () {
+    return view('admin.expense');
+})->name('expense');

@@ -68,7 +68,7 @@
 <script>
   $(function () {
     $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "responsive": true, "lengthChange": false, "autoWidth": false,"pageLength": 8,
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     
@@ -79,6 +79,7 @@
       "ordering": true,
       "info": true,
       "autoWidth": false,
+      "pageLength": 5,
       "responsive": true,
     });
   });
