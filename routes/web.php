@@ -10,6 +10,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\ExpenseController;
 
 Route::post('registers', [RegisterController::class, 'register'])->name('registers');
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
@@ -46,9 +47,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/supplier', [SupplierController::class, 'index'])->name('supplier');
     Route::post('/suppliers/store', [SupplierController::class, 'store'])->name('suppliers.store');
     Route::get('/supplier/{id}', [SupplierController::class, 'show'])->name('supplier.show');
+    Route::delete('/suppliers/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
 });
 
 
-Route::get('expense', function () {
-    return view('admin.expense');
-})->name('expense');
+
+Route::middleware('auth')->group(function () {
+    Route::post('/expenses/store', [ExpenseController::class, 'store'])->name('expenses.store');
+    Route::get('/expenses', [ExpenseController::class, 'index'])->name('expense');
+});
+
+
+
+
+
+Route::get('income', function () {
+    return view('admin.income');
+})->name('income');

@@ -220,6 +220,12 @@
             
           </li>
           <li class="nav-item">
+            <a href="{{ route('income') }}" class="nav-link">
+                <i class="nav-icon fas fa-coins"></i>
+                <p>Income</p>
+            </a>
+        </li>
+          <li class="nav-item">
             <a href="{{Route('expense')}}" class="nav-link">
               <i class="nav-icon fas fa-wallet"></i>
               <p>

@@ -1,40 +1,41 @@
 @extends('admin.index')
-@section('title', 'Expense')
-@section('page-title', 'Expense')
-@section('page', 'Expense')
+@section('title', 'Income')
+@section('page-title', 'Income')
+@section('page', 'Income')
 
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <!-- Total Expense Card -->
+        <!-- Total Income Card -->
         <div class="col-md-4">
-            <div class="info-box bg-danger">
-                <span class="info-box-icon"><i class="fas fa-wallet"></i></span>
+            <div class="info-box bg-success">
+                <span class="info-box-icon"><i class="fas fa-coins"></i></span>
                 <div class="info-box-content">
-                    <span class="info-box-text">Total Expense</span>
-                    <span class="info-box-number">₹ 2000</span>
+                    <span class="info-box-text">Total Income</span>
+                    <span class="info-box-number">₹ 5000</span>
                 </div>
             </div>
-            <!-- Static Expense Chart -->
+
+            <!-- Static Income Chart -->
             <div class="row mt-4">
                 <div class="col-md-12">
                     <div class="card card-outline card-success">
                         <div class="card-header">
-                            <h3 class="card-title">Expense Overview (Static)</h3>
+                            <h3 class="card-title">Income Overview (Static)</h3>
                         </div>
                         <div class="card-body">
-                            <canvas id="staticExpenseChart" height="100"></canvas>
+                            <canvas id="staticIncomeChart" height="100"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Add Expense Form -->
+        <!-- Add Income Form -->
         <div class="col-md-8">
             <div class="card card-primary">
                 <div class="card-header">
-                    <h3 class="card-title">Add New Expense</h3>
+                    <h3 class="card-title">Add New Income</h3>
                 </div>
                 <form method="POST" action="#">
                     @csrf
@@ -44,32 +45,32 @@
                             <input type="number" class="form-control" name="amount" required>
                         </div>
                         <div class="form-group">
-                            <label for="category">Category</label>
-                            <input type="text" class="form-control" name="category" required>
+                            <label for="source">Source</label>
+                            <input type="text" class="form-control" name="source" required>
                         </div>
                         <div class="form-group">
                             <label for="description">Description</label>
                             <textarea class="form-control" name="description"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="expense_date">Date</label>
-                            <input type="date" class="form-control" name="expense_date" required>
+                            <label for="income_date">Date</label>
+                            <input type="date" class="form-control" name="income_date" required>
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-danger">Add Expense</button>
+                        <button type="submit" class="btn btn-success">Add Income</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Expense List Table -->
+    <!-- Income List Table -->
     <div class="row mt-3">
         <div class="col-md-12">
             <div class="card card-outline card-secondary">
                 <div class="card-header">
-                    <h3 class="card-title">Expense List</h3>
+                    <h3 class="card-title">Income List</h3>
                 </div>
                 <div class="card-body table-responsive">
                     <table class="table table-bordered table-hover">
@@ -77,63 +78,65 @@
                             <tr>
                                 <th>#</th>
                                 <th>Amount</th>
-                                <th>Category</th>
+                                <th>Source</th>
                                 <th>Description</th>
                                 <th>Date</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @foreach ($expenses as $index => $expense) --}}
+                            {{-- @foreach ($incomes as $index => $income) --}}
                             <tr>
-                                <td>$index + 1 </td>
-                                <td>₹$expense->amount</td>
-                                <td>$expense->category</td>
-                                <td>$expense->description</td>
-                                <td>$expense->expense_date->format('d M Y') </td>
+                                <td> $index + 1 </td>
+                                <td>₹ $income->amount </td>
+                                <td> $income->source </td>
+                                <td> $income->description </td>
+                                <td> Carbon\Carbon::parse($income->income_date)->format('d M Y') </td>
                             </tr>
                             {{-- @endforeach --}}
                         </tbody>
                     </table>
-                    {{-- {{ $expenses->links() }} <!-- Pagination --> --}}
+                    {{-- {{ $incomes->links() }} --}}
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ctx = document.getElementById('staticExpenseChart').getContext('2d');
+    const ctx = document.getElementById('staticIncomeChart').getContext('2d');
 
     new Chart(ctx, {
-        type: 'pie',
+        type: 'bar',
         data: {
-            labels: ['Food', 'Transport', 'Bills', 'Shopping', 'Other'],
+            labels: ['01 Apr', '02 Apr', '03 Apr', '04 Apr', '05 Apr'],
             datasets: [{
-                label: 'Expense Categories',
-                data: [1200, 800, 500, 700, 300],
-                backgroundColor: [
-                    '#f56954', // red
-                    '#00a65a', // green
-                    '#f39c12', // yellow
-                    '#00c0ef', // aqua
-                    '#3c8dbc'  // blue
-                ],
-                borderColor: '#fff',
-                borderWidth: 2
+                label: 'Income (₹)',
+                data: [1000, 1200, 800, 1500, 500],
+                backgroundColor: '#28a745',
+                borderRadius: 5
             }]
         },
         options: {
             responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '₹' + value;
+                        }
+                    }
+                }
+            },
             plugins: {
                 legend: {
-                    position: 'bottom',
+                    display: false
                 },
                 tooltip: {
                     callbacks: {
                         label: function(context) {
-                            return context.label + ': ₹' + context.raw;
+                            return '₹' + context.raw;
                         }
                     }
                 }
@@ -142,4 +145,3 @@
     });
 </script>
 @endsection
-    

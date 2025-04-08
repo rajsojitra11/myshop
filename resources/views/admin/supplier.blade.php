@@ -80,8 +80,15 @@
                   <td>{{ $supplier->product_categories }}</td>
                   <td>{{ $supplier->bank_details }}</td>
                   <td class="text-center">
-                      <a href="{{ route('supplier.show', $supplier->id) }}" class="btn btn-sm btn-primary">View Profile</a>
-                  </td>
+                    <a href="{{ route('supplier.show', $supplier->id) }}" class="btn btn-sm btn-primary mb-1">View Profile</a>
+                    
+                    <form action="{{ route('supplier.destroy', $supplier->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this supplier?');" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+                
               </tr>
               @endforeach
           </tbody>

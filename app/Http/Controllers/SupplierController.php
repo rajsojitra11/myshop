@@ -49,4 +49,15 @@ class SupplierController extends Controller
 
         return redirect()->back()->with('supplier', 'Supplier added successfully!');
     }
+    public function destroy($id)
+    {
+        $supplier = Supplier::findOrFail($id);
+        if ($supplier->user_id !== Auth::id()) {
+            return redirect()->back()->withErrors('Unauthorized action.');
+        }
+
+        $supplier->delete();
+
+        return redirect()->back()->with('supplier', 'Supplier deleted successfully!');
+    }
 }

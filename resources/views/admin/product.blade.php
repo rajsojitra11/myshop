@@ -230,7 +230,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    /** ===========================
+    /*  ===========================
      *  Search Product Functionality
      *  =========================== */
     document.getElementById("supplierSearch").addEventListener("input", function () {

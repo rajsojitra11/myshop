@@ -5,6 +5,13 @@
 
 @section('content')
 <div class="container-fluid">
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <div class="row">
         <!-- Total Expense Card -->
         <div class="col-md-4">
@@ -12,18 +19,23 @@
                 <span class="info-box-icon"><i class="fas fa-wallet"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Total Expense</span>
-                    <span class="info-box-number">₹ 2000</span>
+                    <span class="info-box-number">₹ {{ number_format($total, 2) }}</span>
                 </div>
             </div>
-            <!-- Static Expense Chart -->
+
+            <!-- Dynamic Expense Chart -->
             <div class="row mt-4">
                 <div class="col-md-12">
                     <div class="card card-outline card-success">
                         <div class="card-header">
-                            <h3 class="card-title">Expense Overview (Static)</h3>
+                            <h3 class="card-title">Expense Overview</h3>
                         </div>
                         <div class="card-body">
-                            <canvas id="staticExpenseChart" height="100"></canvas>
+                            @if($chartData->isEmpty())
+                                <p class="text-center text-muted">No expense data to display in the chart.</p>
+                            @else
+                                <canvas id="staticExpenseChart" height="100"></canvas>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -36,7 +48,7 @@
                 <div class="card-header">
                     <h3 class="card-title">Add New Expense</h3>
                 </div>
-                <form method="POST" action="#">
+                <form method="POST" action="{{ route('expenses.store') }}">
                     @csrf
                     <div class="card-body">
                         <div class="form-group">
@@ -83,62 +95,65 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @foreach ($expenses as $index => $expense) --}}
-                            <tr>
-                                <td>$index + 1 </td>
-                                <td>₹$expense->amount</td>
-                                <td>$expense->category</td>
-                                <td>$expense->description</td>
-                                <td>$expense->expense_date->format('d M Y') </td>
-                            </tr>
-                            {{-- @endforeach --}}
+                            @forelse ($expenses as $index => $expense)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>₹{{ $expense->amount }}</td>
+                                    <td>{{ $expense->category }}</td>
+                                    <td>{{ $expense->description }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($expense->expense_date)->format('d M Y') }}</td>
+                                </tr>
+                            @empty
+                                <tr><td colspan="5" class="text-center text-muted">No expenses recorded.</td></tr>
+                            @endforelse
                         </tbody>
                     </table>
-                    {{-- {{ $expenses->links() }} <!-- Pagination --> --}}
+                    <div class="d-flex justify-content-center">
+                        {{ $expenses->links() }}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-
+<!-- Chart.js Script -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ctx = document.getElementById('staticExpenseChart').getContext('2d');
+    @if(!$chartData->isEmpty())
+        const ctx = document.getElementById('staticExpenseChart').getContext('2d');
+        const chartLabels = {!! json_encode($chartData->pluck('category')) !!};
+        const chartValues = {!! json_encode($chartData->pluck('total')) !!};
 
-    new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: ['Food', 'Transport', 'Bills', 'Shopping', 'Other'],
-            datasets: [{
-                label: 'Expense Categories',
-                data: [1200, 800, 500, 700, 300],
-                backgroundColor: [
-                    '#f56954', // red
-                    '#00a65a', // green
-                    '#f39c12', // yellow
-                    '#00c0ef', // aqua
-                    '#3c8dbc'  // blue
-                ],
-                borderColor: '#fff',
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return context.label + ': ₹' + context.raw;
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: chartLabels,
+                datasets: [{
+                    label: 'Expense Categories',
+                    data: chartValues,
+                    backgroundColor: [
+                        '#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc',
+                        '#8e44ad', '#1abc9c', '#d35400', '#2c3e50', '#c0392b'
+                    ],
+                    borderColor: '#fff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ₹' + context.raw;
+                            }
                         }
                     }
                 }
             }
-        }
-    });
+        });
+    @endif
 </script>
 @endsection
