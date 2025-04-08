@@ -220,7 +220,7 @@
             
           </li>
           <li class="nav-item">
-            <a href="{{ route('income') }}" class="nav-link">
+            <a href="{{ route('income.index') }}" class="nav-link">
                 <i class="nav-icon fas fa-coins"></i>
                 <p>Income</p>
             </a>

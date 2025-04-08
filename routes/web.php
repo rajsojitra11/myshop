@@ -11,6 +11,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\IncomeController;
 
 Route::post('registers', [RegisterController::class, 'register'])->name('registers');
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
@@ -28,7 +29,7 @@ Route::get('setting', [UserController::class, 'setting'])->name('setting');
 // Route::get('viewprofile', [UserController::class, 'viewprofile'])->name('viewprofile');
 
 
-Route::post('invoice', [InvoiceController::class, 'store'])->name('invoice');
+// Route::post('invoice', [InvoiceController::class, 'store'])->name('invoice');
 
 
 Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update')->middleware('auth');
@@ -60,7 +61,7 @@ Route::middleware('auth')->group(function () {
 
 
 
-
-Route::get('income', function () {
-    return view('admin.income');
-})->name('income');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/income', [IncomeController::class, 'index'])->name('income.index');
+    Route::post('/income', [IncomeController::class, 'store'])->name('income.store');
+});

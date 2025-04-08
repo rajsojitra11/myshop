@@ -12,7 +12,7 @@
                 <span class="info-box-icon"><i class="fas fa-coins"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Total Income</span>
-                    <span class="info-box-number">₹ 5000</span>
+                    <span class="info-box-number">₹ {{ number_format($totalIncome, 2) }}</span>
                 </div>
             </div>
 
@@ -21,7 +21,7 @@
                 <div class="col-md-12">
                     <div class="card card-outline card-success">
                         <div class="card-header">
-                            <h3 class="card-title">Income Overview (Static)</h3>
+                            <h3 class="card-title">Income Overview</h3>
                         </div>
                         <div class="card-body">
                             <canvas id="staticIncomeChart" height="100"></canvas>
@@ -37,7 +37,7 @@
                 <div class="card-header">
                     <h3 class="card-title">Add New Income</h3>
                 </div>
-                <form method="POST" action="#">
+                <form method="POST" action="{{ route('income.store') }}">
                     @csrf
                     <div class="card-body">
                         <div class="form-group">
@@ -84,18 +84,25 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @foreach ($incomes as $index => $income) --}}
-                            <tr>
-                                <td> $index + 1 </td>
-                                <td>₹ $income->amount </td>
-                                <td> $income->source </td>
-                                <td> $income->description </td>
-                                <td> Carbon\Carbon::parse($income->income_date)->format('d M Y') </td>
-                            </tr>
-                            {{-- @endforeach --}}
-                        </tbody>
+                            @forelse ($incomes as $index => $income)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>₹ {{ number_format($income->amount, 2) }}</td>
+                                    <td>{{ $income->source }}</td>
+                                    <td>{{ $income->description }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($income->income_date)->format('d M Y') }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="text-center">No income records found.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>                        
                     </table>
-                    {{-- {{ $incomes->links() }} --}}
+                    <div class="mt-2">
+                        {{ $incomes->links() }}
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -103,16 +110,20 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const ctx = document.getElementById('staticIncomeChart').getContext('2d');
+
+    const incomeLabels = {!! json_encode($chartData->pluck('date')->map(fn($date) => \Carbon\Carbon::parse($date)->format('d M'))->toArray()) !!};
+    const incomeData = {!! json_encode($chartData->pluck('total')->toArray()) !!};
 
     new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['01 Apr', '02 Apr', '03 Apr', '04 Apr', '05 Apr'],
+            labels: incomeLabels,
             datasets: [{
                 label: 'Income (₹)',
-                data: [1000, 1200, 800, 1500, 500],
+                data: incomeData,
                 backgroundColor: '#28a745',
                 borderRadius: 5
             }]
@@ -144,4 +155,5 @@
         }
     });
 </script>
+
 @endsection

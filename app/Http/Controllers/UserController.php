@@ -4,6 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Expense;
+use App\Models\Supplier;
+use App\Models\product;
+use App\Models\income;
+
+
 
 class UserController extends Controller
 {
@@ -14,10 +20,15 @@ class UserController extends Controller
             return redirect()->route('login');
         }
 
+        $user = Auth::user();
 
-        return view('admin.dashboard');
+        $totalExpense = Expense::where('user_id', $user->id)->sum('amount');
+        $totalIncome = Income::where('user_id', $user->id)->sum('amount');
+        $supplierCount = Supplier::count();
+        $productCount = Product::count();
+
+        return view('admin.dashboard', compact('totalExpense', 'totalIncome', 'supplierCount', 'productCount'));
     }
-
     public function register()
     {
         return view('register');
