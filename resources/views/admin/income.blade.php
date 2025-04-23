@@ -27,6 +27,51 @@
                             <canvas id="staticIncomeChart" height="100"></canvas>
                         </div>
                     </div>
+                     <!-- Filter Income by Date Range -->
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card card-outline card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Find Income Between Dates</h3>
+                        </div>
+                        <div class="card-body">
+                            <form method="GET" action="{{ route('income.filter') }}">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <label for="start_date">Start Date</label>
+                                        <input type="date" class="form-control" name="start_date" required>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <label for="end_date">End Date</label>
+                                        <input type="date" class="form-control" name="end_date" required>
+                                    </div>
+                                    <div class="col-md-2 d-flex align-items-end">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-info w-100 mt-3">Search</button>
+                            </form>
+                            
+                        </div>
+                    </div>
+
+                    <!-- Display Filtered Total Income -->
+                    @if(isset($filteredIncome))
+<div class="row mt-3">
+    <div class="col-md-12">
+        <div class="info-box bg-info">
+            <span class="info-box-icon"><i class="fas fa-coins"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Total Income (Filtered)</span>
+                <span class="info-box-number">₹ {{ number_format($filteredIncome, 2) }}</span>
+                <span class="info-box-text small">From {{ \Carbon\Carbon::parse($startDate)->format('d M Y') }} to {{ \Carbon\Carbon::parse($endDate)->format('d M Y') }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
+                </div>
+            </div>
                 </div>
             </div>
         </div>
@@ -102,14 +147,12 @@
                     <div class="mt-2">
                         {{ $incomes->links() }}
                     </div>
-                    
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const ctx = document.getElementById('staticIncomeChart').getContext('2d');
@@ -155,5 +198,4 @@
         }
     });
 </script>
-
 @endsection

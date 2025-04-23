@@ -5,13 +5,13 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeController;
+use App\Http\Controllers\InvoiceController;
 
 Route::post('registers', [RegisterController::class, 'register'])->name('registers');
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
@@ -23,13 +23,9 @@ Route::get('register', [UserController::class, 'register'])->name('register');
 Route::get('dashboard', [UserController::class, 'dashboard'])->name('dashboard');
 Route::get('product', [UserController::class, 'product'])->name('product');
 Route::get('supplier', [UserController::class, 'supplier'])->name('supplier');
-Route::get('customer', [UserController::class, 'customer'])->name('customer');
-Route::get('invoice', [UserController::class, 'invoice'])->name('invoice');
+Route::get('customer', [UserController::class, 'customer']);
 Route::get('setting', [UserController::class, 'setting'])->name('setting');
-// Route::get('viewprofile', [UserController::class, 'viewprofile'])->name('viewprofile');
 
-
-// Route::post('invoice', [InvoiceController::class, 'store'])->name('invoice');
 
 
 Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update')->middleware('auth');
@@ -42,6 +38,15 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
     Route::put('/products/{id}', [ProductController::class, 'update'])->name('product.update');
 });
+
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/invoice', [InvoiceController::class, 'create'])->name('invoice.create');
+    Route::post('/invoice', [InvoiceController::class, 'store'])->name('invoice.store');
+    Route::get('/customers', [InvoiceController::class, 'showCustomers'])->name('customer');
+});
+
 
 
 Route::middleware(['auth'])->group(function () {
@@ -60,8 +65,8 @@ Route::middleware('auth')->group(function () {
 
 
 
-
 Route::middleware(['auth'])->group(function () {
     Route::get('/income', [IncomeController::class, 'index'])->name('income.index');
     Route::post('/income', [IncomeController::class, 'store'])->name('income.store');
+    Route::get('/income/filter', [IncomeController::class, 'filter'])->name('income.filter');
 });

@@ -4,170 +4,17 @@
 @section('page', 'Invoice')
 
 @section('content')
-<style>
-    
-@media print {
-        /* General Print Styles */
-    body {
-        font-size: 16px;
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-    }
-
-    /* Hide unnecessary elements during print */
-    .main-footer,
-    .btn,
-    #addRow,
-    img,
-    .removeRow,
-    #printInvoice,
-    .col-6 p,
-    #to-details,
-    #mobile-bill-wrapper,
-    #invoiceTable th:nth-child(7), /* Hide Action column header */
-    #invoiceTable td:nth-child(7) { /* Hide Action column cells */
-        display: none !important;
-    }
-
-    /* Convert form fields to plain text for printing */
-    input, select {
-        font-size: 16px;
-        width: auto;
-        padding: 5px;
-        border: none;
-        background: none;
-        box-shadow: none;
-        -webkit-appearance: none;
-        display: inline-block;
-    }
-
-    /* Print payment method */
-    #print-payment-method {
-        display: block !important;
-        font-size: 16px;
-        margin-top: 15px;
-        font-weight: bold;
-        padding: 5px;
-        border-bottom: 1px solid black;
-    }
-
-    #paymentMethodDisplay {
-        font-weight: bold;
-        padding: 5px;
-        border-bottom: 1px solid black;
-    }
-
-    /* Customer and Invoice details in two columns */
-    .invoice-info {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-    }
-
-    .invoice-info .col-md-6 {
-        width: 48%;
-    }
-
-    /* Style the invoice header */
-    .invoice h4 {
-        text-align: center;
-        font-size: 22px;
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
-
-    /* Table Styles */
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-    }
-
-    table, th, td {
-        border: 1px solid black;
-        padding: 8px;
-        text-align: left;
-    }
-
-    th {
-        font-weight: bold;
-    }
-
-    td {
-        font-size: 14px;
-    }
-
-    /* Amount Due Section */
-    .amount-due {
-        text-align: right;
-        font-size: 16px;
-        font-weight: bold;
-    }
-
-    /* Ensure the invoice table doesn't break in between */
-    #invoiceTable {
-        page-break-inside: auto;
-    }
-
-    /* Prevent breaking between rows */
-    #invoiceTable tr {
-        page-break-inside: avoid;
-    }
-
-    /* Ensure totals are printed at the bottom of the page */
-    .table-responsive {
-        page-break-before: auto;
-    }
-
-    /* Style the "To" details for print */
-    #print-to-details {
-        display: block !important;
-        font-size: 16px;
-        font-weight: bold;
-        padding: 5px;
-        border-bottom: 1px solid black;
-        margin-bottom: 10px;
-    }
-
-    /* Hide unnecessary sections like input fields in "To" details */
-    #to-details {
-        display: block !important;
-        font-size: 16px;
-        font-weight: bold;
-        margin-top: 10px;
-    }
-
-    /* Page setup to prevent page break after header */
-    @page {
-        margin: 20mm;
-    }
-
-    /* Adjust spacing for the total amounts section */
-    .table-responsive td {
-        padding: 8px;
-    }
-
-    .table-responsive th {
-        padding: 8px;
-    }
-}
-/* Style the table for Amount Due with a dim border */
-.table-responsive table {
-    border: 1px solid #ddd;  /* Dim border color */
-    border-radius: 5px;      /* Optional: adds rounded corners */
-}
-
-.table-responsive th,
-.table-responsive td {
-    border: 1px solid #ddd;  /* Dim border color for table cells */
-    padding: 8px;
-}
-
-</style> 
-    
+<link rel="stylesheet" href="{{ asset('css/invoice.css') }}">
+@if(session('success'))
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ session('success') }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+@endif
 <div class="container">
-  <form action="{{ route('invoice') }}" method="POST">
+  <form action="{{ route('invoice.store') }}" method="POST">
       @csrf
 
       <div class="invoice p-3 mb-3">
@@ -281,7 +128,7 @@
                     
                   </div><br>
                 <b class="lead">Payment Methods:</b>
-                <select id="paymentMethod" class="form-control">
+                <select id="paymentMethod" name="paymentMethod" class="form-control">
                     <option value="Credit Card">Credit Card</option>
                     <option value="PayPal">PayPal</option>
                     <option value="Bank Transfer">Bank Transfer</option>
@@ -339,10 +186,10 @@
     $(document).ready(function() {
       let rowIndex = 0; // Start from 0, as the first row is removed
   
-      // Remove first row of the table on page load
+      
       $("#productRows").empty();
   
-      // Function to add a new product row
+     
       function addProductRow() {
           let newRow = `
               <tr>
@@ -482,12 +329,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
-
-
-
-
-
 document.addEventListener("DOMContentLoaded", function () {
     const paymentSelect = document.getElementById("paymentMethod");
     const paymentImages = document.querySelectorAll(".pay-icon");
@@ -524,5 +365,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   </script>
+  <script>
+    $(document).ready(function() {
+      setTimeout(function() {
+        $(".alert").alert('close');
+      }, 3000); // 3 seconds
+    });
+  </script>
+  
   
 @endsection

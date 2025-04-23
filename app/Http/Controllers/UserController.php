@@ -8,6 +8,7 @@ use App\Models\Expense;
 use App\Models\Supplier;
 use App\Models\product;
 use App\Models\income;
+use App\Models\invoice;
 
 
 
@@ -25,9 +26,10 @@ class UserController extends Controller
         $totalExpense = Expense::where('user_id', $user->id)->sum('amount');
         $totalIncome = Income::where('user_id', $user->id)->sum('amount');
         $supplierCount = Supplier::count();
+        $customer = invoice::count();
         $productCount = Product::count();
 
-        return view('admin.dashboard', compact('totalExpense', 'totalIncome', 'supplierCount', 'productCount'));
+        return view('admin.dashboard', compact('totalExpense', 'totalIncome', 'supplierCount', 'customer', 'productCount'));
     }
     public function register()
     {

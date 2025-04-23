@@ -9,18 +9,19 @@ use Illuminate\Support\Facades\DB;
 
 class IncomeController extends Controller
 {
-
     public function index()
     {
         $userId = Auth::id();
 
+        // Fetch all income records for the logged-in user
         $incomes = Income::where('user_id', $userId)
             ->orderBy('income_date', 'desc')
             ->paginate(10);
 
+        // Calculate total income
         $totalIncome = Income::where('user_id', $userId)->sum('amount');
 
-        // Group by date and sum income for chart
+        // Prepare data for the income chart (grouped by date)
         $chartData = Income::where('user_id', $userId)
             ->select(DB::raw("DATE(income_date) as date"), DB::raw("SUM(amount) as total"))
             ->groupBy('date')
@@ -48,5 +49,45 @@ class IncomeController extends Controller
         ]);
 
         return redirect()->route('income.index')->with('success', 'Income added successfully!');
+    }
+
+    public function filter(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $userId = Auth::id();
+        $startDate = $request->start_date;
+        $endDate = $request->end_date;
+
+        // Calculate total income between the given dates
+        $filteredIncome = Income::where('user_id', $userId)
+            ->whereBetween('income_date', [$startDate, $endDate])
+            ->sum('amount');
+
+        // Fetch existing incomes and total income for the main page
+        $incomes = Income::where('user_id', $userId)
+            ->orderBy('income_date', 'desc')
+            ->paginate(10);
+
+        $totalIncome = Income::where('user_id', $userId)->sum('amount');
+
+        $chartData = Income::where('user_id', $userId)
+            ->select(DB::raw("DATE(income_date) as date"), DB::raw("SUM(amount) as total"))
+            ->groupBy('date')
+            ->orderBy('date', 'asc')
+            ->get();
+
+        return view('admin.income', compact('incomes', 'totalIncome', 'chartData', 'filteredIncome', 'startDate', 'endDate'));
+    }
+
+    public function destroy($id)
+    {
+        $income = Income::where('user_id', Auth::id())->findOrFail($id);
+        $income->delete();
+
+        return redirect()->route('income.index')->with('success', 'Income record deleted successfully!');
     }
 }

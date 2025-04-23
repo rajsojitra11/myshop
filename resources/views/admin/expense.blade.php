@@ -1,4 +1,5 @@
 @extends('admin.index')
+
 @section('title', 'Expense')
 @section('page-title', 'Expense')
 @section('page', 'Expense')
@@ -40,6 +41,53 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Date Range Filter -->
+           <!-- Date Range Filter -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card card-outline card-info">
+            <div class="card-header">
+                <h3 class="card-title">Find Expense Between Dates</h3>
+            </div>
+            <div class="card-body">
+                <form method="GET" action="{{ route('expense') }}">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <label>From Date:</label>
+                            <input type="date" class="form-control" name="start_date" value="{{ request('start_date') }}">
+                        </div>
+                        <div class="col-md-5">
+                            <label>To Date:</label>
+                            <input type="date" class="form-control" name="end_date" value="{{ request('end_date') }}">
+                        </div>
+                    </div>
+                    <div class="row mt-3 text-center">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <!-- Filtered Total Expense Box -->
+            @if(isset($filteredTotal))
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <div class="info-box bg-info">
+                            <span class="info-box-icon"><i class="fas fa-coins"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Total Expense (Filtered)</span>
+                                <span class="info-box-number">₹ {{ number_format($filteredTotal, 2) }}</span>
+                                <span class="info-box-text small">From {{ \Carbon\Carbon::parse($startDate)->format('d M Y') }} to {{ \Carbon\Carbon::parse($endDate)->format('d M Y') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
 
         <!-- Add Expense Form -->

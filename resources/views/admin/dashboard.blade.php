@@ -59,7 +59,7 @@
             <!-- small box -->
             <div class="small-box bg-primary">
               <div class="inner">
-                <h3>65</h3>
+                <h3>{{ number_format($customer) }}</h3>
 
                 <p>Customer</p>
               </div>

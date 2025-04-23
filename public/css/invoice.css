@@ -1,0 +1,161 @@
+@media print {
+    /* General Print Styles */
+    body {
+        font-size: 16px;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Hide unnecessary elements during print */
+    .main-footer,
+.btn,
+#addRow,
+img,
+.removeRow,
+#printInvoice,
+.col-6 p,
+#to-details,
+#mobile-bill-wrapper,
+#invoiceTable th:nth-child(7), /* Hide Action column header */
+#invoiceTable td:nth-child(7) {
+        /* Hide Action column cells */
+        display: none !important;
+    }
+
+    /* Convert form fields to plain text for printing */
+    input,
+    select {
+        font-size: 16px;
+        width: auto;
+        padding: 5px;
+        border: none;
+        background: none;
+        box-shadow: none;
+        /* -webkit-appearance: none; */
+        display: inline-block;
+    }
+
+    /* Print payment method */
+    #print-payment-method {
+        display: block !important;
+        font-size: 16px;
+        margin-top: 15px;
+        font-weight: bold;
+        padding: 5px;
+        border-bottom: 1px solid black;
+    }
+
+    #paymentMethodDisplay {
+        font-weight: bold;
+        padding: 5px;
+        border-bottom: 1px solid black;
+    }
+
+    /* Customer and Invoice details in two columns */
+    .invoice-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .invoice-info .col-md-6 {
+        width: 48%;
+    }
+
+    /* Style the invoice header */
+    .invoice h4 {
+        text-align: center;
+        font-size: 22px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    /* Table Styles */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        font-weight: bold;
+    }
+
+    td {
+        font-size: 14px;
+    }
+
+    /* Amount Due Section */
+    .amount-due {
+        text-align: right;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    /* Ensure the invoice table doesn't break in between */
+    #invoiceTable {
+        page-break-inside: auto;
+    }
+
+    /* Prevent breaking between rows */
+    #invoiceTable tr {
+        page-break-inside: avoid;
+    }
+
+    /* Ensure totals are printed at the bottom of the page */
+    .table-responsive {
+        page-break-before: auto;
+    }
+
+    /* Style the "To" details for print */
+    #print-to-details {
+        display: block !important;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 5px;
+        border-bottom: 1px solid black;
+        margin-bottom: 10px;
+    }
+
+    /* Hide unnecessary sections like input fields in "To" details */
+    #to-details {
+        display: block !important;
+        font-size: 16px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    /* Page setup to prevent page break after header */
+    @page {
+        margin: 20mm;
+    }
+
+    /* Adjust spacing for the total amounts section */
+    .table-responsive td {
+        padding: 8px;
+    }
+
+    .table-responsive th {
+        padding: 8px;
+    }
+}
+/* Style the table for Amount Due with a dim border */
+.table-responsive table {
+    border: 1px solid #ddd; /* Dim border color */
+    border-radius: 5px; /* Optional: adds rounded corners */
+}
+
+.table-responsive th,
+.table-responsive td {
+    border: 1px solid #ddd; /* Dim border color for table cells */
+    padding: 8px;
+}
