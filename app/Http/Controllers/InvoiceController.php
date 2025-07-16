@@ -16,7 +16,7 @@ class InvoiceController extends Controller
     }
     public function create()
     {
-        return view('admin.invoice'); // Replace with your actual Blade file path
+        return view('admin.invoice');
     }
 
     public function store(Request $request)

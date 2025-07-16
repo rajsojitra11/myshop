@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Models\Expense;
 use App\Models\Supplier;
 use App\Models\product;
@@ -31,6 +32,16 @@ class UserController extends Controller
 
         return view('admin.dashboard', compact('totalExpense', 'totalIncome', 'supplierCount', 'customer', 'productCount'));
     }
+
+    public function invoice()
+    {
+        $user = Auth::user();
+        Log::info("User accessing products: " . $user->id);
+
+        $products = Product::where('uid', $user->id)->get();
+
+        return view('admin.invoice', compact('products'));
+    }
     public function register()
     {
         return view('register');
@@ -47,10 +58,7 @@ class UserController extends Controller
     {
         return view('admin.customer');
     }
-    public function invoice()
-    {
-        return view('admin.invoice');
-    }
+
     public function setting()
     {
         if (!session('user')) {

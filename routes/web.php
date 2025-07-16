@@ -42,6 +42,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/invoices', [UserController::class, 'invoice'])->name('invoice.show');
     Route::get('/invoice', [InvoiceController::class, 'create'])->name('invoice.create');
     Route::post('/invoice', [InvoiceController::class, 'store'])->name('invoice.store');
     Route::get('/customers', [InvoiceController::class, 'showCustomers'])->name('customer');

@@ -262,7 +262,7 @@
           </a>  
         </li>      
         <li class="nav-item">
-          <a href="{{Route('invoice.create')}}" class="nav-link">
+          <a href="{{Route('invoice.show')}}" class="nav-link">
             <i class="nav-icon fas fa-file-invoice"></i>
             <p>
               Invoice

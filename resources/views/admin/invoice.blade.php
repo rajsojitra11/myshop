@@ -191,20 +191,29 @@
   
      
       function addProductRow() {
-          let newRow = `
-              <tr>
-                  <td><input type="text" name="products[${rowIndex}][serial]" class="form-control"></td>
-                  <td><input type="text" name="products[${rowIndex}][name]" class="form-control" required></td>
-                  <td><input type="text" name="products[${rowIndex}][description]" class="form-control"></td>
-                  <td><input type="number" name="products[${rowIndex}][qty]" class="form-control qty" required></td>
-                  <td><input type="number" name="products[${rowIndex}][rate]" class="form-control rate" required></td>
-                  <td><input type="number" name="products[${rowIndex}][amount]" class="form-control amount" readonly></td>
-                  <td><button type="button" class="btn btn-danger removeRow">X</button></td>
-              </tr>
-          `;
-          $("#productRows").append(newRow);
-          rowIndex++;
-      }
+    let newRow = `
+        <tr>
+            <td><input type="text" name="products[${rowIndex}][serial]" class="form-control"></td>
+            <td>
+                <select name="products[${rowIndex}][name]" class="form-control product-select" required>
+                    <option value="">Select Product</option>
+                    @foreach($products as $product)
+                        <option value="{{ $product->name }}" data-description="{{ $product->description }}" data-rate="{{ $product->price }}">
+                            {{ $product->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </td>
+            <td><input type="text" name="products[${rowIndex}][description]" class="form-control"></td>
+            <td><input type="number" name="products[${rowIndex}][qty]" class="form-control qty" required></td>
+            <td><input type="number" name="products[${rowIndex}][rate]" class="form-control rate" required></td>
+            <td><input type="number" name="products[${rowIndex}][amount]" class="form-control amount" readonly></td>
+            <td><button type="button" class="btn btn-danger removeRow">X</button></td>
+        </tr>
+    `;
+    $("#productRows").append(newRow);
+    rowIndex++;
+}
   
       // Add product row when "Add Product" button is clicked
       $("#addRow").click(function() {
@@ -370,6 +379,18 @@ document.addEventListener("DOMContentLoaded", function () {
       setTimeout(function() {
         $(".alert").alert('close');
       }, 3000); // 3 seconds
+      $(document).on('change', '.product-select', function() {
+    const row = $(this).closest('tr');
+    const selectedOption = $(this).find('option:selected');
+    const description = selectedOption.data('description');
+    const rate = selectedOption.data('rate');
+    
+    row.find('input[name*="[description]"]').val(description);
+    row.find('.rate').val(rate);
+    
+    // Trigger calculation
+    row.find('.rate').trigger('input');
+});
     });
   </script>
   

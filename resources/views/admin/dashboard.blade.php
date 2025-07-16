@@ -50,7 +50,7 @@
             <div class="icon">
               <i class="fas fa-box"></i>
             </div>
-            <a href="{{ route('product') }}" class="small-box-footer">
+            <a href="{{Route('product.index')}}" class="small-box-footer">
               More info <i class="fas fa-arrow-circle-right"></i>
             </a>
           </div>
