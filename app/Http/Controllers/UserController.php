@@ -44,7 +44,7 @@ class UserController extends Controller
     }
     public function register()
     {
-        return view('register');
+        return view('index');
     }
     public function product()
     {
