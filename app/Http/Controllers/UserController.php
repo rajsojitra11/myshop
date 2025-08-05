@@ -19,7 +19,7 @@ class UserController extends Controller
     public function dashboard()
     {
         if (!session('user')) {
-            return redirect()->route('login');
+            return redirect()->route('index');
         }
 
         $user = Auth::user();
@@ -44,7 +44,7 @@ class UserController extends Controller
     }
     public function register()
     {
-        return view('index');
+        return view('register');
     }
     public function product()
     {
@@ -62,7 +62,7 @@ class UserController extends Controller
     public function setting()
     {
         if (!session('user')) {
-            return redirect()->route('login');
+            return redirect()->route('index');
         }
         return view('admin.setting');
     }

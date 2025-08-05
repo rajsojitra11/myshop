@@ -3,66 +3,45 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Register</title>
+    <title>Login</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
+    
     <div class="login-container">
-      <!-- Side Image -->
       <div class="side-image">
         <img src="img/raj.png" alt="No Image" />
       </div>
-  
-      <!-- Login Form -->
       <div class="login-form">
-        <h2>Welcome to Myshop</h2>
-  
-        <form action="{{ route('registers') }}" method="POST">
-          <!-- CSRF Token for Laravel -->
+        <h2>Welcome to Myshop</h2>      
+        <p></p>
+
+        <form action="{{Route('index')}}" method="POST">
           @csrf
-  
-          <!-- First Name -->
           <div class="input-group">
-            <label for="firstname">Enter Name</label>
-            <input type="text" id="firstname" name="firstname" required />
+            <label for="username">Username or email</label>
+            <input type="text" id="username" name="username" required />
           </div>
   
-          <!-- Email -->
-          <div class="input-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required />
-          </div>
-  
-          <!-- Password -->
           <div class="input-group">
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required />
           </div>
   
-          <!-- Confirm Password -->
-          <div class="input-group">
-            <label for="confirmpassword">Confirm Password</label>
-            <input type="password" name="password_confirmation" required>
-          </div>
-  
-          <!-- Agree to Terms Checkbox -->
           <div class="remember-forgot">
-            <label for="agree">
-              <input type="checkbox" id="agree" name="agree" required />
-              I agree to the terms and conditions
+            <label for="remember">
+              <input type="checkbox" id="remember" name="remember" /> Remember Me
             </label>
+            <a href="#">Forgot Password?</a>
           </div>
   
-          <!-- Submit Button -->
-          <button type="submit" class="btn">Sign up</button>
+          <button type="submit" class="btn">Sign in</button>
         </form>
   
-        <!-- Login Link -->
         <div class="signup-link">
-          Already have an account? <a href="{{ route('login') }}">Sign in</a>
+          Don't have an account? <a href="{{Route('register')}}">Sign up</a>
         </div>
       </div>
     </div>
   </body>
-  
 </html>

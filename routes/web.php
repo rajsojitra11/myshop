@@ -14,7 +14,7 @@ use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\InvoiceController;
 
 Route::post('registers', [RegisterController::class, 'register'])->name('registers');
-Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
+Route::get('/', [LoginController::class, 'showLoginForm'])->name('index');
 Route::post('/', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 

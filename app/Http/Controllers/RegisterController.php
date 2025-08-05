@@ -30,6 +30,6 @@ class RegisterController extends Controller
 
 
 
-        return redirect()->route('login')->with('success', 'Registration Successful');
+        return redirect()->route('index')->with('success', 'Registration Successful');
     }
 }

@@ -34,7 +34,7 @@ class ProductController extends Controller
 
         $user = Auth::user();
         if (!$user) {
-            return redirect()->route('login')->with('error', 'You must be logged in to add a product.');
+            return redirect()->route('index')->with('error', 'You must be logged in to add a product.');
         }
 
         Log::info("Logged in user ID: " . $user->id);
