@@ -15,6 +15,28 @@
   
       <!-- Login Form -->
       <div class="login-form">
+        @if ($errors->any())
+    <div id="error-message" style="background: #dc3545; color: #fff; padding: 12px; border-radius: 5px; margin-bottom: 10px;">
+        <ul style="margin: 0; padding-left: 20px;">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+
+    <script>
+        // Auto hide after 4 seconds
+        setTimeout(function () {
+            let box = document.getElementById('error-message');
+            if (box) {
+                box.style.transition = "opacity 0.5s ease";
+                box.style.opacity = "0";
+                setTimeout(() => box.remove(), 500); // remove after fade out
+            }
+        }, 4000);
+    </script>
+@endif
+
         <h2>Welcome to Myshop</h2>
   
         <form action="{{ route('registers') }}" method="POST">
