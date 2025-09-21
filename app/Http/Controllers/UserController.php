@@ -33,15 +33,15 @@ class UserController extends Controller
         return view('admin.dashboard', compact('totalExpense', 'totalIncome', 'supplierCount', 'customer', 'productCount'));
     }
 
-    public function invoice()
-    {
-        $user = Auth::user();
-        Log::info("User accessing products: " . $user->id);
+    // public function invoice()
+    // {
+    //     $user = Auth::user();
+    //     Log::info("User accessing products: " . $user->id);
 
-        $products = Product::where('uid', $user->id)->get();
+    //     $products = Product::where('uid', $user->id)->get();
 
-        return view('admin.invoice', compact('products'));
-    }
+    //     return view('admin.invoice', compact('products'));
+    // }
     public function register()
     {
         return view('register');

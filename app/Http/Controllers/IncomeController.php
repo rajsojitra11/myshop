@@ -13,18 +13,41 @@ class IncomeController extends Controller
     {
         $userId = Auth::id();
 
-        // Fetch all income records for the logged-in user
-        $incomes = Income::where('user_id', $userId)
+        // Build income query (manual incomes)
+        $incomeQuery = Income::where('user_id', $userId)
+            ->select('amount', 'source', 'description', 'income_date');
+
+        // Build invoice query (mapped to income-like fields)
+        $invoiceQuery = DB::table('invoices')
+            ->where('user_id', $userId)
+            ->select([
+                'total as amount',
+                'to_name as source',
+                'invoice_number as description',
+                'created_at as income_date',
+            ]);
+
+        // Merge both sources
+        $incomes = $incomeQuery
+            ->unionAll($invoiceQuery)
             ->orderBy('income_date', 'desc')
             ->paginate(10);
 
-        // Calculate total income
-        $totalIncome = Income::where('user_id', $userId)->sum('amount');
+        // Total income (incomes + invoices)
+        $totalIncome = Income::where('user_id', $userId)->sum('amount') +
+            DB::table('invoices')->where('user_id', $userId)->sum('total');
 
-        // Prepare data for the income chart (grouped by date)
-        $chartData = Income::where('user_id', $userId)
+        // Chart data
+        $incomeChart = Income::where('user_id', $userId)
             ->select(DB::raw("DATE(income_date) as date"), DB::raw("SUM(amount) as total"))
-            ->groupBy('date')
+            ->groupBy('date');
+
+        $invoiceChart = DB::table('invoices')
+            ->where('user_id', $userId)
+            ->select(DB::raw("DATE(created_at) as date"), DB::raw("SUM(total) as total"))
+            ->groupBy('date');
+
+        $chartData = $incomeChart->unionAll($invoiceChart)
             ->orderBy('date', 'asc')
             ->get();
 
@@ -62,25 +85,21 @@ class IncomeController extends Controller
         $startDate = $request->start_date;
         $endDate = $request->end_date;
 
-        // Calculate total income between the given dates
-        $filteredIncome = Income::where('user_id', $userId)
+        // Filtered manual incomes
+        $incomeFiltered = Income::where('user_id', $userId)
             ->whereBetween('income_date', [$startDate, $endDate])
             ->sum('amount');
 
-        // Fetch existing incomes and total income for the main page
-        $incomes = Income::where('user_id', $userId)
-            ->orderBy('income_date', 'desc')
-            ->paginate(10);
+        // Filtered invoice incomes
+        $invoiceFiltered = DB::table('invoices')
+            ->where('user_id', $userId)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('total');
 
-        $totalIncome = Income::where('user_id', $userId)->sum('amount');
+        $filteredIncome = $incomeFiltered + $invoiceFiltered;
 
-        $chartData = Income::where('user_id', $userId)
-            ->select(DB::raw("DATE(income_date) as date"), DB::raw("SUM(amount) as total"))
-            ->groupBy('date')
-            ->orderBy('date', 'asc')
-            ->get();
-
-        return view('admin.income', compact('incomes', 'totalIncome', 'chartData', 'filteredIncome', 'startDate', 'endDate'));
+        // Reload full page data
+        return $this->index()->with(compact('filteredIncome', 'startDate', 'endDate'));
     }
 
     public function destroy($id)

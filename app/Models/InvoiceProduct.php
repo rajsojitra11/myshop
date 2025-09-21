@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class InvoiceProduct extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'invoice_id',
         'serial',
@@ -16,8 +19,9 @@ class InvoiceProduct extends Model
         'amount'
     ];
 
+    // Relation back to invoice
     public function invoice()
     {
-        return $this->belongsTo(Invoice::class);
+        return $this->belongsTo(Invoice::class, 'invoice_id', 'id');
     }
 }
