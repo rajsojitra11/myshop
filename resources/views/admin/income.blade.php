@@ -128,8 +128,7 @@
                             <th>Amount</th>
                             <th>Source</th>
                             <th>Description</th>
-                            <th>Date</th>
-                            <th>Invoice</th>
+                            <th>Date</th>        
                         </tr>
                     </thead>
                     <tbody>
@@ -139,14 +138,7 @@
                                 <td>₹ {{ number_format($income->amount, 2) }}</td>
                                 <td>{{ $income->source ?? '-' }}</td>
                                 <td>{{ $income->description ?? '-' }}</td>
-                                <td>{{ \Carbon\Carbon::parse($income->income_date)->format('d M Y') }}</td>
-                                <td>
-                                    @if($income->invoice)
-                                        <a href="{{ route('invoices.show', $income->invoice->id) }}" class="btn btn-sm btn-outline-primary">View Invoice</a>
-                                    @else
-                                        <span class="badge bg-secondary">No Invoice</span>
-                                    @endif
-                                </td>
+                                <td>{{ \Carbon\Carbon::parse($income->income_date)->format('d M Y') }}</td>                                
                             </tr>
                         @empty
                             <tr>

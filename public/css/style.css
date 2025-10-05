@@ -1,7 +1,7 @@
 body {
-    font-family: sans-serif;
+    font-family: "Segoe UI", sans-serif;
     margin: 0;
-    background-color: #f4f4f4;
+    background-color: #e0f2ff; /* softer blue background */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,19 +9,16 @@ body {
 }
 
 .login-container {
-    background-color: white;
+    position: relative;
+    background-color: #ffffff; /* clean white container */
     padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15); /* softer, deeper shadow */
     width: 800px;
     display: flex;
     align-items: center;
     flex-direction: row;
-}
-
-.login-form {
-    flex: 1;
-    padding-left: 40px;
+    overflow: hidden;
 }
 
 .login-container::before {
@@ -30,14 +27,19 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 5px;
-    background: linear-gradient(to right, #007bff, #00a3ff);
+    height: 6px;
+    background: linear-gradient(to right, #1e3a8a, #3b82f6);
+}
+
+.login-form {
+    flex: 1;
+    padding-left: 40px;
 }
 
 .login-form h2 {
     text-align: center;
     margin-bottom: 30px;
-    color: #333;
+    color: #1f2937;
 }
 
 .input-group {
@@ -47,15 +49,22 @@ body {
 .input-group label {
     display: block;
     margin-bottom: 7px;
-    color: #666;
+    color: #64748b; /* muted gray-blue */
 }
 
 .input-group input {
     width: calc(100% - 22px);
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 12px;
+    border: 1px solid #cbd5e1; /* soft border */
+    border-radius: 6px;
     box-sizing: border-box;
+    transition: border 0.3s;
+}
+
+.input-group input:focus {
+    border-color: #3b82f6; /* highlight on focus */
+    outline: none;
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
 }
 
 .remember-forgot {
@@ -66,27 +75,29 @@ body {
 }
 
 .remember-forgot label {
-    color: #666;
+    color: #64748b;
 }
 
 .remember-forgot a {
-    color: #007bff;
+    color: #1e3a8a;
     text-decoration: none;
     margin-right: 22px;
 }
 
 .btn {
-    background-color: #007bff;
+    background-color: #1e3a8a;
     color: white;
-    padding: 12px 20px;
+    padding: 14px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
     width: 94%;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 .btn:hover {
-    background-color: #0056b3;
+    background-color: #2563eb;
+    transform: translateY(-2px);
 }
 
 .signup-link {
@@ -95,8 +106,9 @@ body {
 }
 
 .signup-link a {
-    color: #007bff;
+    color: #1e3a8a;
     text-decoration: none;
+    font-weight: 500;
 }
 
 .side-image {
@@ -107,6 +119,7 @@ body {
 .side-image img {
     max-width: 100%;
     height: auto;
+    border-radius: 12px;
 }
 
 @media (max-width: 850px) {

@@ -10,4 +10,10 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = ['code', 'name', 'price', 'stock_quantity', 'image', 'uid'];
+
+
+    public function invoiceProducts()
+    {
+        return $this->hasMany(InvoiceProduct::class, 'product_id');
+    }
 }

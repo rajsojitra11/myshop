@@ -53,7 +53,7 @@ class ExpenseController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'amount' => 'required|numeric',
+            'amount' => 'required|numeric|min:0',
             'category' => 'required|string|max:255',
             'description' => 'nullable|string',
             'expense_date' => 'required|date',

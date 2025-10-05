@@ -65,7 +65,20 @@
                     <div><label class="font-bold">Code:</label> {{ $product->code }}</div>
                     <div><label class="font-bold">Name:</label> {{ $product->name }}</div>
                     <div><label class="font-bold">Price:</label> ₹{{ $product->price }}</div>
-                    <div><label class="font-bold">Quantity:</label>{{ $product->stock_quantity }}</div>
+                    <div>
+    <label class="font-weight-bold">Quantity:</label>
+    @if($product->available_quantity < 10)
+        <span class="badge bg-danger px-2 py-1 fs-6" style="font-size:0.9rem;">
+            <i class="fas fa-exclamation-triangle me-1"></i>
+            {{ $product->available_quantity }}
+        </span>
+    @else
+        <span class="badge bg-success px-2 py-1 fs-6" style="font-size:0.9rem;">
+            {{ $product->available_quantity }}
+        </span>
+    @endif
+</div>
+
                 </div>
 
                 <!-- Action Buttons -->

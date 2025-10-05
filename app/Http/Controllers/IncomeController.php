@@ -23,7 +23,7 @@ class IncomeController extends Controller
             ->select([
                 'total as amount',
                 'to_name as source',
-                'invoice_number as description',
+                'bill_no as description',
                 'created_at as income_date',
             ]);
 
@@ -57,7 +57,7 @@ class IncomeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'amount' => 'required|numeric',
+            'amount' => 'required|numeric|min:0',
             'source' => 'required|string|max:255',
             'description' => 'nullable|string',
             'income_date' => 'required|date',
