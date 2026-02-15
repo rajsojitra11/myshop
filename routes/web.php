@@ -19,12 +19,12 @@ Route::post('/', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 
-Route::get('register', [UserController::class, 'register'])->name('register');
-Route::get('dashboard', [UserController::class, 'dashboard'])->name('dashboard');
-Route::get('product', [UserController::class, 'product'])->name('product');
-Route::get('supplier', [UserController::class, 'supplier'])->name('supplier');
-Route::get('customer', [UserController::class, 'customer']);
-Route::get('setting', [UserController::class, 'setting'])->name('setting');
+Route::middleware(['auth'])->group(function () {
+    Route::get('register', [UserController::class, 'register'])->name('register');
+    Route::get('dashboard', [UserController::class, 'dashboard'])->name('dashboard');
+    Route::get('product', [UserController::class, 'product'])->name('product');
+    Route::get('setting', [UserController::class, 'setting'])->name('setting');
+});
 
 
 
@@ -44,7 +44,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/invoice/create', [InvoiceController::class, 'create'])->name('invoice.create');
     Route::get('/invoice/{id}', [InvoiceController::class, 'show'])->name('invoice.show');
     Route::post('/invoice', [InvoiceController::class, 'store'])->name('invoice.store');
-    Route::get('/customers', [InvoiceController::class, 'showCustomers'])->name('customer');
+    Route::get('/customer', [InvoiceController::class, 'showCustomers'])->name('customer');
 });
 
 

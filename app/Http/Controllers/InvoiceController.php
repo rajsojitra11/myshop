@@ -17,7 +17,7 @@ class InvoiceController extends Controller
      */
     public function showCustomers()
     {
-        $invoices = Invoice::select('id', 'to_name', 'mobile_no', 'bill_no', 'payment_method', 'total')
+        $invoices = Invoice::with('products')
             ->orderBy('created_at', 'desc')
             ->get();
 
