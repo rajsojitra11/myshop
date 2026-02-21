@@ -13,7 +13,7 @@ class Customer extends Model
         'name',
         'address',
         'email',
-        'mobile_no'
+        'mobile_no',
     ];
 
     public function invoices()

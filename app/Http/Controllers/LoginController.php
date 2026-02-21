@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
-use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -27,20 +25,12 @@ class LoginController extends Controller
         ];
 
         if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            Session::put('user', $user);
-            return redirect()->route('dashboard')->with('users');
+            $request->session()->regenerate();
+            session(['user' => Auth::user()]);
+            return redirect()->route('dashboard');
         }
 
         return back()->withErrors(['login_error' => 'Invalid credentials.'])->withInput();
-    }
-
-    public function dashboard()
-    {
-        if (!Session::has('user')) {
-            return redirect()->route('index');
-        }
-        return view('dashboard');
     }
 
     public function logout(Request $request)

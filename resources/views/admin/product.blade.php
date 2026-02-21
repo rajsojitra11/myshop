@@ -59,6 +59,7 @@
                 <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default.png') }}" 
                      alt="{{ $product->name }}" 
                      class="w-full h-40 object-cover rounded-lg"
+                     loading="lazy"
                      onerror="this.src='{{ asset('images/default.png') }}';" />
 
                 <div class="product-details mt-3">

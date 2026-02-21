@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\InvoiceProduct;
@@ -18,13 +19,15 @@ class ProductController extends Controller
         // Get all products for this user
         $products = Product::where('uid', $user->id)->get();
 
-        // Calculate available quantity
-        foreach ($products as $product) {
-            // Sum qty from invoice_products matching product name
-            // Recommended: Use product_id in future for more reliability
-            $soldQty = InvoiceProduct::where('name', $product->name)->sum('qty');
-            $product->available_quantity = $product->stock_quantity - $soldQty;
-        }
+        // Fix: One grouped query for ALL sold quantities instead of 1 query per product (N+1)
+        $soldQtyMap = InvoiceProduct::select('name', DB::raw('SUM(qty) as sold'))
+            ->groupBy('name')
+            ->pluck('sold', 'name');
+
+        // Map available quantity in PHP — no extra DB calls
+        $products->each(function ($product) use ($soldQtyMap) {
+            $product->available_quantity = $product->stock_quantity - ($soldQtyMap[$product->name] ?? 0);
+        });
 
         return view('admin.product', compact('products'));
     }
