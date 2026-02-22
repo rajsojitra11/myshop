@@ -181,15 +181,18 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
+        <img src="{{ Auth::user()->profile_image 
+            ? asset('storage/profile_images/' . Auth::user()->profile_image) 
+            : asset('dist/img/user1-128x128.jpg') }}"
+           class="img-circle elevation-2"
+           style="width:35px;height:35px;object-fit:cover;"
+           alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">@if(session()->has('user'))
-            Welcome, {{ session('user')->name }}
-        @else
-            Welcome, Guest
-        @endif</a>
-        </div>
+    <a href="#" class="d-block">
+        {{ session('user')->name ?? 'Guest' }}
+    </a>
+</div>
       </div>
 
       <!-- SidebarSearch Form -->

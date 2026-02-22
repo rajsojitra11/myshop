@@ -18,7 +18,7 @@ return new class extends Migration {
         });
 
         Schema::table('products', function (Blueprint $table) {
-            $table->foreignId('uid')->nullable()->after('id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->after('id')->constrained('users')->onDelete('cascade');
         });
     }
 

@@ -16,6 +16,7 @@ use App\Http\Controllers\InvoiceController;
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('index');
 Route::post('/', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('register', [UserController::class, 'register'])->name('register');
 Route::post('registers', [RegisterController::class, 'register'])->name('registers');
 
 // ─── Protected Routes (requires login) ───────────────────────────────────────
@@ -23,7 +24,6 @@ Route::post('registers', [RegisterController::class, 'register'])->name('registe
 Route::middleware('auth')->group(function () {
 
     // Dashboard & User Pages
-    Route::get('register', [UserController::class, 'register'])->name('register');
     Route::get('dashboard', [UserController::class, 'dashboard'])->name('dashboard');
     Route::get('product', [UserController::class, 'product'])->name('product');
     Route::get('setting', [UserController::class, 'setting'])->name('setting');

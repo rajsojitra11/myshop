@@ -17,7 +17,7 @@ class ProductController extends Controller
         $user = Auth::user();
 
         // Get all products for this user
-        $products = Product::where('uid', $user->id)->get();
+        $products = Product::where('user_id', $user->id)->get();
 
         // Fix: One grouped query for ALL sold quantities instead of 1 query per product (N+1)
         $soldQtyMap = InvoiceProduct::select('name', DB::raw('SUM(qty) as sold'))
@@ -58,7 +58,7 @@ class ProductController extends Controller
             'price'          => $request->price,
             'stock_quantity' => $request->quantity,
             'image'          => $imagePath,
-            'uid'            => $user->id,
+            'user_id'        => $user->id,
         ]);
 
         Log::info("Product created successfully: ", $product->toArray());
@@ -77,7 +77,7 @@ class ProductController extends Controller
 
         $product = Product::findOrFail($id);
 
-        if ($product->uid !== Auth::id()) {
+        if ($product->user_id !== Auth::id()) {
             return redirect()->route('product.index')->with('error', 'Unauthorized action.');
         }
 
@@ -95,7 +95,7 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
 
-        if ($product->uid !== Auth::id()) {
+        if ($product->user_id !== Auth::id()) {
             return redirect()->route('product.index')->with('error', 'Unauthorized action.');
         }
 

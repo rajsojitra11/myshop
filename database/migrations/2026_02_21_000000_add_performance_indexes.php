@@ -32,10 +32,10 @@ return new class extends Migration
             }
         });
 
-        // products.uid — used in ProductController WHERE
+        // products.user_id — used in ProductController WHERE
         Schema::table('products', function (Blueprint $table) {
-            if (!$this->indexExists('products', 'products_uid_index')) {
-                $table->index('uid');
+            if (!$this->indexExists('products', 'products_user_id_index')) {
+                $table->index('user_id');
             }
         });
 
@@ -43,6 +43,20 @@ return new class extends Migration
         Schema::table('invoice_products', function (Blueprint $table) {
             if (!$this->indexExists('invoice_products', 'invoice_products_name_index')) {
                 $table->index('name');
+            }
+        });
+
+        // customer.user_id — used in customerController WHERE
+        Schema::table('customers', function (Blueprint $table) {
+            if (!$this->indexExists('customers', 'customers_user_id_index')) {
+                $table->index('user_id');
+            }
+        });
+
+        // supplier.user_id — used in customerController WHERE
+        Schema::table('suppliers', function (Blueprint $table) {
+            if (!$this->indexExists('suppliers', 'suppliers_user_id_index')) {
+                $table->index('user_id');
             }
         });
     }
@@ -62,10 +76,16 @@ return new class extends Migration
             $table->dropIndexIfExists('invoices_user_id_index');
         });
         Schema::table('products', function (Blueprint $table) {
-            $table->dropIndexIfExists('products_uid_index');
+            $table->dropIndexIfExists('products_user_id_index');
         });
         Schema::table('invoice_products', function (Blueprint $table) {
             $table->dropIndexIfExists('invoice_products_name_index');
+        });
+        Schema::table('customers', function (Blueprint $table) {
+            $table->dropIndexIfExists('customers_user_id_index');
+        });
+        Schema::table('suppliers', function (Blueprint $table) {
+            $table->dropIndexIfExists('suppliers_user_id_index');
         });
     }
 

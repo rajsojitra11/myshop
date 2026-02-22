@@ -40,7 +40,7 @@ class InvoiceController extends Controller
     public function create()
     {
         $user = Auth::user();
-        $products = Product::where('uid', $user->id)->get();
+        $products = Product::where('user_id', $user->id)->get();
 
         return view('admin.invoice', compact('products'));
     }
