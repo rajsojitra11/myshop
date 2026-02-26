@@ -26,9 +26,12 @@
                     <td>₹ {{ number_format($invoice->total, 2) }}</td>
                     <td>
                         <a href="{{ route('invoice.show', $invoice->id) }}" class="btn btn-sm btn-primary">View</a>
+                        <a href="{{ route('invoice.pdf', $invoice->id) }}" class="btn btn-sm btn-info" title="Download PDF">
+                            <i class="fas fa-file-pdf"></i> PDF
+                        </a>
                         <button type="button" 
                                 class="btn btn-sm btn-success" 
-                                onclick='sendWhatsApp(@json($invoice))'
+                                onclick='sendWhatsAppInvoice(@json($invoice->id))'
                                 title="Send via WhatsApp">
                             <i class="fab fa-whatsapp"></i> WhatsApp
                         </button>
@@ -40,58 +43,50 @@
 </div>
 
 <script>
-function sendWhatsApp(invoice) {
-    // Remove any spaces or special characters from mobile number
-    let cleanMobile = invoice.mobile_no.replace(/\D/g, '');
-    
-    // Add country code if not present (assuming India +91)
-    if (!cleanMobile.startsWith('91') && cleanMobile.length === 10) {
-        cleanMobile = '91' + cleanMobile;
-    }
-    
-    // Format date
-    const date = new Date(invoice.created_at);
-    const formattedDate = date.toLocaleDateString('en-GB');
-    
-    // Build products list
-    let productsText = '';
-    if (invoice.products && invoice.products.length > 0) {
-        invoice.products.forEach((product, index) => {
-            productsText += `\n\n*Item ${index + 1}:* ${product.name}`;
-            productsText += `\n   Qty: ${product.qty} | Rate: ₹${parseFloat(product.rate).toLocaleString('en-IN')} | Amount: ₹${parseFloat(product.amount).toLocaleString('en-IN')}`;
-        });
-    }
-    
-    // Create formatted message
-    const message = `*MY SHOP - BILL SUMMARY*
+function sendWhatsAppInvoice(invoiceId) {
+    // Show loading message
+    const btn = event.target.closest('button');
+    const originalHtml = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+    btn.disabled = true;
 
-*Date:* ${formattedDate}
-*Customer:* ${invoice.to_name}
-*Bill No:* ${invoice.bill_no}
-${productsText}
-
---------------------------------
-*TOTAL AMOUNT*
---------------------------------
-Subtotal: ₹${parseFloat(invoice.subtotal).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
-Tax: ₹${parseFloat(invoice.tax).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
-Shipping: ₹${parseFloat(invoice.shipping || 0).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
---------------------------------
-*TOTAL: ₹${parseFloat(invoice.total).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}*
-
-*Payment Method:* ${invoice.payment_method}
-
-Thank you for your business!
-- My Shop`;
-
-    // Encode message for URL
-    const encodedMessage = encodeURIComponent(message);
-    
-    // Create WhatsApp URL
-    const whatsappUrl = `https://wa.me/${cleanMobile}?text=${encodedMessage}`;
-    
-    // Open WhatsApp in new tab
-    window.open(whatsappUrl, '_blank');
+    // Send request to backend
+    fetch('{{ route("invoice.whatsapp") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({
+            invoice_id: invoiceId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Notify user about PDF generation
+            alert('Invoice PDF generated successfully!\n\nA WhatsApp window will open. You can attach the PDF file manually or copy-paste the link from the PDF button.');
+            
+            // Open WhatsApp with message
+            window.open(data.whatsapp_url, '_blank');
+            
+            // Open PDF in new tab for user to download/share
+            setTimeout(() => {
+                window.open(data.pdf_url, '_blank');
+            }, 500);
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while sending the invoice.');
+    })
+    .finally(() => {
+        // Restore button
+        btn.innerHTML = originalHtml;
+        btn.disabled = false;
+    });
 }
 </script>
 @endsection

@@ -61,6 +61,8 @@ Route::middleware('auth')->group(function () {
     // Invoices
     Route::get('/invoice/create', [InvoiceController::class, 'create'])->name('invoice.create');
     Route::get('/invoice/{id}', [InvoiceController::class, 'show'])->name('invoice.show');
+    Route::get('/invoice/{id}/pdf', [InvoiceController::class, 'generatePdf'])->name('invoice.pdf');
+    Route::post('/invoice/whatsapp', [InvoiceController::class, 'sendWhatsApp'])->name('invoice.whatsapp');
     Route::post('/invoice', [InvoiceController::class, 'store'])->name('invoice.store');
     Route::get('/customer', [InvoiceController::class, 'showCustomers'])->name('customer');
 
