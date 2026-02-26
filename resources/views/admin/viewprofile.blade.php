@@ -71,15 +71,21 @@
     <!-- Action Buttons -->
     <div class="card-footer bg-light">
         <div class="btn-group-flex d-flex gap-2" role="group">
-            <a href="{{ route('supplier-stock.create', $supplier->id) }}" class="btn btn-success">
-                <i class="fas fa-plus mr-2"></i>Add Stock
-            </a>
-            <a href="{{ route('supplier.edit', $supplier->id) }}" class="btn btn-warning">
-                <i class="fas fa-edit mr-2"></i>Edit Supplier
-            </a>
-            <a href="{{ route('supplier') }}" class="btn btn-secondary">
-                <i class="fas fa-times mr-2"></i>Close
-            </a>
+            @if (!Session::has('supplier_email'))
+                <a href="{{ route('supplier-stock.create', $supplier->id) }}" class="btn btn-success">
+                    <i class="fas fa-plus mr-2"></i>Add Stock
+                </a>
+                <a href="{{ route('supplier.edit', $supplier->id) }}" class="btn btn-warning">
+                    <i class="fas fa-edit mr-2"></i>Edit Supplier
+                </a>
+                <a href="{{ route('supplier') }}" class="btn btn-secondary">
+                    <i class="fas fa-times mr-2"></i>Close
+                </a>
+            @else
+                <a href="{{ route('supplier.logout') }}" class="btn btn-danger">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                </a>
+            @endif
         </div>
     </div>
 </div>

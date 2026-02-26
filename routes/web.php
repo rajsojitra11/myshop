@@ -31,6 +31,15 @@ Route::prefix('customer')->name('customer.')->group(function () {
     Route::get('logout', [CustomerController::class, 'logout'])->name('logout');
 });
 
+// ─── Supplier Routes (Public) ────────────────────────────────────────────────
+
+Route::prefix('supplier')->name('supplier.')->group(function () {
+    Route::get('login', [SupplierController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [SupplierController::class, 'login']);
+    Route::get('dashboard', [SupplierController::class, 'dashboard'])->name('dashboard');
+    Route::get('logout', [SupplierController::class, 'logout'])->name('logout');
+});
+
 // ─── Protected Routes (requires login) ───────────────────────────────────────
 
 Route::middleware('auth')->group(function () {

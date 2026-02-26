@@ -115,6 +115,7 @@
             <div class="login-tabs">
                 <button class="tab-btn active" data-tab="admin-login">Admin Login</button>
                 <button class="tab-btn" data-tab="customer-login">Customer Login</button>
+                <button class="tab-btn" data-tab="supplier-login">Supplier Login</button>
             </div>
 
             <!-- Admin Login Tab -->
@@ -175,9 +176,9 @@
                     <button type="submit" class="btn">Sign in</button>
                 </form>
 
-                <div class="signup-link">
+                {{-- <div class="signup-link">
                     Don't have an account? <a href="{{ route('register') }}">Sign up</a>
-                </div>
+                </div> --}}
             </div>
 
             <!-- Customer Login Tab -->
@@ -240,6 +241,69 @@
 
                 <div class="signup-link">
                     <small>Don't have any invoice? <a href="{{ route('index') }}">Go back to Admin Login</a></small>
+                </div>
+            </div>
+
+            <!-- Supplier Login Tab -->
+            <div id="supplier-login" class="tab-content">
+                <div class="customer-login-info">
+                    <strong>📧 Use your Email to login</strong><br>
+                    Enter your supplier email and use your Supplier ID as password.
+                </div>
+
+                <form action="{{ route('supplier.login') }}" method="POST">
+                    @csrf
+
+                    <div class="input-group">
+                        <label for="supplier_email">Email Address</label>
+                        <input
+                            type="email"
+                            id="supplier_email"
+                            name="email"
+                            value="{{ old('email') }}"
+                            placeholder="e.g., supplier@example.com"
+                            required
+                        />
+                    </div>
+
+                    <div class="input-group" style="position: relative;">
+                        <label for="supplier_password">Password</label>
+                        <input
+                            type="password"
+                            id="supplier_password"
+                            name="password"
+                            placeholder="Enter your Supplier ID as password"
+                            required
+                            style="padding-right: 35px;"
+                        />
+
+                        <!-- Eye Icon -->
+                        <span
+                            id="toggleSupplierPassword"
+                            style="position: absolute; right: 30px; top: 38px; cursor: pointer; color: #555;"
+                        >
+                            👁️
+                        </span>
+                    </div>
+
+                    <script>
+                        const toggleSupplierPassword = document.getElementById("toggleSupplierPassword");
+                        const supplierPasswordInput = document.getElementById("supplier_password");
+
+                        toggleSupplierPassword.addEventListener("click", function () {
+                            const type = supplierPasswordInput.type === "password" ? "text" : "password";
+                            supplierPasswordInput.type = type;
+
+                            // Toggle icon text
+                            this.textContent = type === "password" ? "👁️" : "🙈";
+                        });
+                    </script>
+
+                    <button type="submit" class="btn" style="margin-top: 10px;">View Profile</button>
+                </form>
+
+                <div class="signup-link">
+                    <small>Don't have a supplier account? <a href="{{ route('index') }}">Go back to Admin Login</a></small>
                 </div>
             </div>
 
