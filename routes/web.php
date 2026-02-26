@@ -7,6 +7,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\SupplierStockController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\InvoiceController;
@@ -47,7 +48,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/supplier', [SupplierController::class, 'index'])->name('supplier');
     Route::post('/suppliers/store', [SupplierController::class, 'store'])->name('suppliers.store');
     Route::get('/supplier/{id}', [SupplierController::class, 'show'])->name('supplier.show');
+    Route::get('/supplier/{id}/edit', [SupplierController::class, 'edit'])->name('supplier.edit');
+    Route::put('/supplier/{id}', [SupplierController::class, 'update'])->name('supplier.update');
     Route::delete('/suppliers/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
+
+    // Supplier Stock Routes
+    Route::get('/supplier/{supplier_id}/stocks/create', [SupplierStockController::class, 'create'])->name('supplier-stock.create');
+    Route::post('/supplier/stocks', [SupplierStockController::class, 'store'])->name('supplier-stock.store');
+    Route::get('/supplier/{supplier_id}/stocks', [SupplierStockController::class, 'show'])->name('supplier-stock.show');
+    Route::get('/supplier/stock/{id}/edit', [SupplierStockController::class, 'edit'])->name('supplier-stock.edit');
+    Route::put('/supplier/stock/{id}', [SupplierStockController::class, 'update'])->name('supplier-stock.update');
+    Route::delete('/supplier/stock/{id}', [SupplierStockController::class, 'destroy'])->name('supplier-stock.destroy');
 
     // Expenses
     Route::get('/expenses', [ExpenseController::class, 'index'])->name('expense');

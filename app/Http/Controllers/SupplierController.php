@@ -18,7 +18,37 @@ class SupplierController extends Controller
     public function show($id)
     {
         $supplier = Supplier::findOrFail($id);
-        return view('admin.viewprofile', compact('supplier'));
+
+        // Load related stock records (paginated) for the supplier
+        $stocks = \App\Models\SupplierStock::where('supplier_id', $id)->orderBy('date', 'desc')->paginate(10);
+
+        return view('admin.viewprofile', compact('supplier', 'stocks'));
+    }
+
+    public function edit($id)
+    {
+        $supplier = Supplier::findOrFail($id);
+        return view('admin.editsupplier', compact('supplier'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $supplier = Supplier::findOrFail($id);
+
+        $validatedData = $request->validate([
+            'company_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:suppliers,email,' . $supplier->id,
+            'address' => 'required|string',
+            'contact_no' => 'required|string|max:20',
+            'country' => 'required|string|max:100',
+            'bank_details' => 'required|string',
+            'product_categories' => 'required|string',
+        ]);
+
+        $supplier->update($validatedData);
+
+        return redirect()->route('supplier.show', $supplier->id)
+                        ->with('success', 'Supplier updated successfully!');
     }
 
 
