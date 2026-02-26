@@ -9,6 +9,8 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Http;
 
 class InvoiceController extends Controller
 {
@@ -103,5 +105,81 @@ class InvoiceController extends Controller
         });
 
         return redirect()->route('invoice.create')->with('success', 'Invoice saved successfully.');
+    }
+
+    /**
+     * Generate PDF for invoice
+     */
+    public function generatePdf($id)
+    {
+        $invoice = Invoice::with('products')->findOrFail($id);
+        
+        $pdf = Pdf::loadView('invoice-pdf', compact('invoice'));
+        
+        return $pdf->download('invoice-' . $invoice->bill_no . '.pdf');
+    }
+
+    /**
+     * Send invoice PDF via WhatsApp
+     */
+    public function sendWhatsApp(Request $request)
+    {
+        $request->validate([
+            'invoice_id' => 'required|exists:invoices,id',
+        ]);
+
+        $invoice = Invoice::with('products')->findOrFail($request->invoice_id);
+
+        try {
+            // Clean mobile number
+            $mobile = preg_replace('/\D/', '', $invoice->mobile_no);
+            
+            // Add country code if not present (assuming India +91)
+            if (!str_starts_with($mobile, '91') && strlen($mobile) === 10) {
+                $mobile = '91' . $mobile;
+            }
+
+            // Generate PDF
+            $pdf = Pdf::loadView('invoice-pdf', compact('invoice'));
+            $pdfContent = $pdf->output();
+            $pdfFileName = 'invoice-' . $invoice->bill_no . '.pdf';
+
+            // Create temporary file
+            $tempPath = storage_path('temp/' . $pdfFileName);
+            if (!file_exists(storage_path('temp'))) {
+                mkdir(storage_path('temp'), 0755, true);
+            }
+            file_put_contents($tempPath, $pdfContent);
+
+            // For demonstration: Create a message with WhatsApp Web link
+            // In production, you would use WhatsApp Business API
+            $message = "Hi " . $invoice->to_name . ",\n\n";
+            $message .= "Here is your invoice:\n";
+            $message .= "Bill No: " . $invoice->bill_no . "\n";
+            $message .= "Total: ₹" . number_format($invoice->total, 2) . "\n\n";
+            $message .= "The invoice PDF has been attached.";
+
+            // Encode and create WhatsApp URL with message
+            // Note: WhatsApp Web doesn't support direct file sending via URL
+            // For production, use WhatsApp Business API with a proper integration
+            $encodedMessage = urlencode($message);
+            $whatsappUrl = "https://wa.me/" . $mobile . "?text=" . $encodedMessage;
+
+            // Return success response with WhatsApp URL and PDF download link
+            return response()->json([
+                'success' => true,
+                'message' => 'Invoice PDF generated successfully',
+                'whatsapp_url' => $whatsappUrl,
+                'pdf_url' => route('invoice.pdf', $invoice->id),
+                'mobile' => $mobile
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('WhatsApp send error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error generating PDF: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

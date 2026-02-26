@@ -9,6 +9,7 @@ use App\Models\Supplier;
 use App\Models\Product;
 use App\Models\Income;
 use App\Models\Invoice;
+use App\Models\SupplierStock;
 
 class UserController extends Controller
 {
@@ -20,8 +21,10 @@ class UserController extends Controller
 
         $user = Auth::user();
 
-        $totalExpense  = Expense::where('user_id', $user->id)->sum('amount');
-        $totalIncome   = Income::where('user_id', $user->id)->sum('amount');
+        $totalExpense  = Expense::where('user_id', $user->id)->sum('amount') +
+                         SupplierStock::where('user_id', $user->id)->sum('amount');
+        $totalIncome   = Income::where('user_id', $user->id)->sum('amount') + 
+                         Invoice::where('user_id', $user->id)->sum('total');
         $supplierCount = Supplier::count();
         $customer      = Invoice::count();
         $productCount  = Product::count();

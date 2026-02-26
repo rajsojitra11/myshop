@@ -46,13 +46,6 @@ return new class extends Migration
             }
         });
 
-        // customer.user_id — used in customerController WHERE
-        Schema::table('customers', function (Blueprint $table) {
-            if (!$this->indexExists('customers', 'customers_user_id_index')) {
-                $table->index('user_id');
-            }
-        });
-
         // supplier.user_id — used in customerController WHERE
         Schema::table('suppliers', function (Blueprint $table) {
             if (!$this->indexExists('suppliers', 'suppliers_user_id_index')) {
@@ -66,27 +59,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('expenses', function (Blueprint $table) {
-            $table->dropIndexIfExists('expenses_user_id_index');
-        });
-        Schema::table('incomes', function (Blueprint $table) {
-            $table->dropIndexIfExists('incomes_user_id_index');
-        });
-        Schema::table('invoices', function (Blueprint $table) {
-            $table->dropIndexIfExists('invoices_user_id_index');
-        });
-        Schema::table('products', function (Blueprint $table) {
-            $table->dropIndexIfExists('products_user_id_index');
-        });
-        Schema::table('invoice_products', function (Blueprint $table) {
-            $table->dropIndexIfExists('invoice_products_name_index');
-        });
-        Schema::table('customers', function (Blueprint $table) {
-            $table->dropIndexIfExists('customers_user_id_index');
-        });
-        Schema::table('suppliers', function (Blueprint $table) {
-            $table->dropIndexIfExists('suppliers_user_id_index');
-        });
+        // Safely skip down for this migration to avoid foreign key constraint errors
+        // Indexes on user_id and other frequently queried columns are beneficial
     }
 
     /**

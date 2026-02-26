@@ -26,4 +26,12 @@ class Supplier extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+    /**
+     * Get the stock records for the supplier.
+     */
+    public function stocks()
+    {
+        return $this->hasMany(SupplierStock::class, 'supplier_id', 'id');
+    }
 }
