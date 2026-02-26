@@ -11,6 +11,7 @@ use App\Http\Controllers\SupplierStockController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\CustomerController;
 
 // ─── Public / Auth Routes ────────────────────────────────────────────────────
 
@@ -19,6 +20,16 @@ Route::post('/', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('register', [UserController::class, 'register'])->name('register');
 Route::post('registers', [RegisterController::class, 'register'])->name('registers');
+
+// ─── Customer Routes (Public) ────────────────────────────────────────────────
+
+Route::prefix('customer')->name('customer.')->group(function () {
+    Route::get('login', [CustomerController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [CustomerController::class, 'login']);
+    Route::get('dashboard', [CustomerController::class, 'dashboard'])->name('dashboard');
+    Route::get('invoice/{id}', [CustomerController::class, 'showInvoice'])->name('invoice');
+    Route::get('logout', [CustomerController::class, 'logout'])->name('logout');
+});
 
 // ─── Protected Routes (requires login) ───────────────────────────────────────
 

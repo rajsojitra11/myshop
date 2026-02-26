@@ -77,6 +77,9 @@
 <!-- Dashboard Page Script -->
 <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
 
+<!-- Demo JS -->
+<script src="{{ asset('dist/js/demo.js') }}"></script>
+
 <!-- DataTables Initialize -->
 <script>
 $(function () {
