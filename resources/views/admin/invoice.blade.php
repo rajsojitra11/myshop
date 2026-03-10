@@ -17,118 +17,115 @@
   <form action="{{ route('invoice.store') }}" method="POST">
       @csrf
 
-      <div class="invoice p-3 mb-3">
+      <div class="invoice p-2 mb-2" style="max-width: 95%; margin: 0 auto;">
           <!-- Title Row -->
-          <div class="row">
+          <div class="row g-0">
               <div class="col-12">
-                  <h4  class="text-center"><i class="fas fa-globe"></i>  My Shop</h4>    
-                  <span class="float-right font-medium">Date: {{ date('d/m/Y') }}</span>
-                  <br>             
-                  <hr>
+                  <h5 class="text-center mb-1"><i class="fas fa-globe"></i> My Shop</h5>    
+                  <span class="float-right font-medium" style="font-size: 0.9rem;">Date: {{ date('d/m/Y') }}</span>
+                  <hr style="margin: 0.5rem 0;">
 
                 </div>
                 
           </div>
 
         <!-- Info Row -->
-<div class="row invoice-info">
+<div class="row invoice-info g-2">
     <!-- Customer Details -->
     <div class="col-md-6">
-        <h5 class="mb-3"><strong>Customer Information</strong></h5>
+        <h6 class="mb-2"><strong>Customer Information</strong></h6>
 
-        <div class="mb-3">
-            <label for="to_name" class="form-label">Name</label>
-            <input type="text" name="to_name" id="to_name" class="form-control" placeholder="Customer Name" required>
+        <div class="mb-2">
+            <label for="to_name" class="form-label" style="font-size: 0.85rem; margin-bottom: 0.25rem;">Name</label>
+            <input type="text" name="to_name" id="to_name" class="form-control form-control-sm" placeholder="Customer Name" required>
         </div>
 
-        <div class="mb-3">
-            <label for="to_address" class="form-label">Address</label>
-            <input type="text" name="to_address" id="to_address" class="form-control" placeholder="Address" required>
+        <div class="mb-2">
+            <label for="to_address" class="form-label" style="font-size: 0.85rem; margin-bottom: 0.25rem;">Address</label>
+            <input type="text" name="to_address" id="to_address" class="form-control form-control-sm" placeholder="Address" required>
         </div>
 
-        <div class="mb-3">
-            <label for="to_email" class="form-label">Email</label>
-            <input type="email" name="to_email" id="to_email" class="form-control" placeholder="Email" required>
+        <div class="mb-2">
+            <label for="to_email" class="form-label" style="font-size: 0.85rem; margin-bottom: 0.25rem;">Email</label>
+            <input type="email" name="to_email" id="to_email" class="form-control form-control-sm" placeholder="Email" required>
         </div>
 
-        <div class="mb-3">
-            <label for="mobile_no" class="form-label">Mobile No.</label>
-            <input type="text" name="mobile_no" id="mobile_no" class="form-control" placeholder="Mobile No." required>
+        <div class="mb-2">
+            <label for="mobile_no" class="form-label" style="font-size: 0.85rem; margin-bottom: 0.25rem;">Mobile No.</label>
+            <input type="text" name="mobile_no" id="mobile_no" class="form-control form-control-sm" placeholder="Mobile No." required>
         </div>
     </div>
 
     <!-- Invoice Details -->
     <div class="col-md-6">
-        <h5 class="mb-3"><strong>Invoice Details</strong></h5>
+        <h6 class="mb-2"><strong>Invoice Details</strong></h6>
 
-        <div class="mb-3">
-            <label for="bill_no" class="form-label">Bill No.</label>
-            <input type="text" name="bill_no" id="bill_no" class="form-control" readonly>           
+        <div class="mb-2">
+            <label for="bill_no" class="form-label" style="font-size: 0.85rem; margin-bottom: 0.25rem;">Bill No.</label>
+            <input type="text" name="bill_no" id="bill_no" class="form-control form-control-sm" readonly>           
         </div>
 
-        <div class="mb-3">
-            <label for="invoice_number" class="form-label">Invoice No.</label>
-            <input type="text" name="invoice_number" id="invoice_number" class="form-control" readonly>
-
-        </div>
-
-        <div class="mb-3">
-            <label for="order_id" class="form-label">Order ID</label>
-            <input type="text" name="order_id" id="order_id" class="form-control" readonly>
+        <div class="mb-2">
+            <label for="invoice_number" class="form-label" style="font-size: 0.85rem; margin-bottom: 0.25rem;">Invoice No.</label>
+            <input type="text" name="invoice_number" id="invoice_number" class="form-control form-control-sm" readonly>
 
         </div>
 
-        <div class="mb-3">
-            <label for="account_number" class="form-label">Account</label>
-            <input type="text" name="account_number" id="account_number" class="form-control" placeholder="Account No." required>
+        <div class="mb-2">
+            <label for="order_id" class="form-label" style="font-size: 0.85rem; margin-bottom: 0.25rem;">Order ID</label>
+            <input type="text" name="order_id" id="order_id" class="form-control form-control-sm" readonly>
+
+        </div>
+
+        <div class="mb-2">
+            <label for="account_number" class="form-label" style="font-size: 0.85rem; margin-bottom: 0.25rem;">Account</label>
+            <input type="text" name="account_number" id="account_number" class="form-control form-control-sm" placeholder="Account No." required>
         </div>
     </div>
 </div>
 
           <!-- Product Table -->
-          <div class="row mt-4">
+          <div class="row mt-2">
               <div class="col-12">
-                  <table class="table table-bordered" id="invoiceTable">
-                      <thead>
-                          <tr>
-                              <th>Serial </th>
-                              <th>Product</th>
-                              <th>Description</th>
-                              <th>Qty</th>
-                              <th>Rate</th>
-                              <th>Amount</th>
-                              <th>Action</th>
+                  <table class="table table-bordered table-sm" id="invoiceTable" style="font-size: 0.9rem;">
+                      <thead class="table-light">
+                          <tr style="font-size: 0.85rem; padding: 0.25rem;">
+                              <th style="padding: 0.35rem;">Serial</th>
+                              <th style="padding: 0.35rem;">Product</th>
+                              <th style="padding: 0.35rem;">Description</th>
+                              <th style="padding: 0.35rem;">Qty</th>
+                              <th style="padding: 0.35rem;">Rate</th>
+                              <th style="padding: 0.35rem;">Amount</th>
+                              <th style="padding: 0.35rem;">Action</th>
                           </tr>
                       </thead>
                       <tbody id="productRows">
                           <tr>
-                              <td><input type="text" name="products[0][serial]" class="form-control"></td>
-                              <td><input type="text" name="products[0][name]" class="form-control" required></td>
-                              <td><input type="text" name="products[0][description]" class="form-control"></td>
-                              <td><input type="number" name="products[0][qty]" class="form-control qty" required></td>
-                              <td><input type="number" name="products[0][rate]" class="form-control subtotal" required></td>
-                              <td><input type="number" name="products[0][amount]" class="form-control subtotal" required></td>
-                              <td><button type="button" class="btn btn-danger removeRow">X</button></td>
+                              <td style="padding: 0.25rem;"><input type="text" name="products[0][serial]" class="form-control form-control-sm"></td>
+                              <td style="padding: 0.25rem;"><input type="text" name="products[0][name]" class="form-control form-control-sm" required></td>
+                              <td style="padding: 0.25rem;"><input type="text" name="products[0][description]" class="form-control form-control-sm"></td>
+                              <td style="padding: 0.25rem;"><input type="number" name="products[0][qty]" class="form-control form-control-sm qty" required></td>
+                              <td style="padding: 0.25rem;"><input type="number" name="products[0][rate]" class="form-control form-control-sm subtotal" required></td>
+                              <td style="padding: 0.25rem;"><input type="number" name="products[0][amount]" class="form-control form-control-sm subtotal" required></td>
+                              <td style="padding: 0.25rem;"><button type="button" class="btn btn-danger btn-sm removeRow">X</button></td>
                           </tr>
                       </tbody>
                   </table>
-                  <button type="button" class="btn btn-primary" id="addRow">+ Add Product</button>
+                  <button type="button" class="btn btn-primary btn-sm" id="addRow">+ Add Product</button>
               </div>
           </div>
 
           <!-- Payment Summary -->
-          <div class="row mt-4">
-            <div class="col-6">
-                <p><strong>Selected Payment Method: </strong></p>
-                <div class="col-6">
-                    <img src="../../dist/img/credit/credit-card.png" alt="Credit Card" class="pay-icon" id="credit_card">
-                    <img src="../../dist/img/credit/paypal2.png" alt="PayPal" class="pay-icon" id="paypal">
-                    <img src="../../dist/img/credit/bank-transfer.png" alt="Bank Transfer" class="pay-icon" id="bank_transfer">
-                    <img src="../../dist/img/credit/money-stack.png" alt="Cash" class="pay-icon" id="cash">
-                    
-                  </div><br>
-                <b class="lead">Payment Methods:</b>
-                <select id="paymentMethod" name="paymentMethod" class="form-control">
+          <div class="row mt-2 g-2">
+            <div class="col-md-6">
+                <p style="font-size: 0.9rem; margin-bottom: 0.5rem;"><strong>Payment Method</strong></p>
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+                    <img src="../../dist/img/credit/credit-card.png" alt="Credit Card" class="pay-icon" id="credit_card" style="width: 40px; height: 40px; cursor: pointer;">
+                    <img src="../../dist/img/credit/paypal2.png" alt="PayPal" class="pay-icon" id="paypal" style="width: 40px; height: 40px; cursor: pointer;">
+                    <img src="../../dist/img/credit/bank-transfer.png" alt="Bank Transfer" class="pay-icon" id="bank_transfer" style="width: 40px; height: 40px; cursor: pointer;">
+                    <img src="../../dist/img/credit/money-stack.png" alt="Cash" class="pay-icon" id="cash" style="width: 40px; height: 40px; cursor: pointer;">
+                </div>
+                <select id="paymentMethod" name="paymentMethod" class="form-control form-control-sm">
                     <option value="Credit Card">Credit Card</option>
                     <option value="PayPal">PayPal</option>
                     <option value="Bank Transfer">Bank Transfer</option>
@@ -136,27 +133,25 @@
                 </select>
             </div>
         
-            <div class="col-6">
-                
-                <p class="lead">Amount Due</p>
+            <div class="col-md-6">
+                <p style="font-size: 0.9rem; margin-bottom: 0.5rem;"><strong>Amount Due</strong></p>
                 <div class="table-responsive">
-                    <table class="table">
-                    
+                    <table class="table table-sm" style="font-size: 0.85rem; margin: 0;">
                         <tr>
-                            <th>Subtotal:</th>
-                            <td><input type="number" name="subtotal" id="subtotal" class="form-control" readonly></td>
+                            <th style="padding: 0.25rem;">Subtotal:</th>
+                            <td style="padding: 0.25rem;"><input type="number" name="subtotal" id="subtotal" class="form-control form-control-sm" readonly></td>
                         </tr>
                         <tr>
-                            <th>Tax (9.3%):</th>
-                            <td><input type="number" name="tax" id="tax" class="form-control" readonly></td>
+                            <th style="padding: 0.25rem;">Tax (9.3%):</th>
+                            <td style="padding: 0.25rem;"><input type="number" name="tax" id="tax" class="form-control form-control-sm" readonly></td>
                         </tr>
                         <tr>
-                            <th>Shipping:</th>
-                            <td><input type="number" name="shipping" id="shipping" class="form-control"></td>
+                            <th style="padding: 0.25rem;">Shipping:</th>
+                            <td style="padding: 0.25rem;"><input type="number" name="shipping" id="shipping" class="form-control form-control-sm"></td>
                         </tr>
-                        <tr>
-                            <th>Total:</th>
-                            <td><input type="number" name="total" id="total" class="form-control" readonly></td>
+                        <tr class="table-active">
+                            <th style="padding: 0.35rem;">Total:</th>
+                            <td style="padding: 0.35rem;"><input type="number" name="total" id="total" class="form-control form-control-sm fw-bold" readonly></td>
                         </tr>
                     </table>
                 </div>
@@ -164,15 +159,15 @@
           </div>
 
           <!-- Submit Button -->
-          <div class="row mt-4">
+          <div class="row mt-2">
             <div class="col-6">
-                <button type="button" class="btn btn-secondary" id="printInvoice">
-                    <i class="fas fa-print"></i> Print Invoice
+                <button type="button" class="btn btn-secondary btn-sm" id="printInvoice">
+                    <i class="fas fa-print"></i> Print
                 </button>
             </div>
-            <div class="col-6 text-right">
-                <button type="submit" class="btn btn-success">
-                    <i class="far fa-credit-card"></i> Submit Invoice
+            <div class="col-6 text-end">
+                <button type="submit" class="btn btn-success btn-sm">
+                    <i class="far fa-credit-card"></i> Submit
                 </button>
             </div>
         </div>
@@ -193,9 +188,9 @@
       function addProductRow() {
     let newRow = `
         <tr>
-            <td><input type="text" name="products[${rowIndex}][serial]" class="form-control"></td>
-            <td>
-                <select name="products[${rowIndex}][name]" class="form-control product-select" required>
+            <td style="padding: 0.25rem;"><input type="text" name="products[${rowIndex}][serial]" class="form-control form-control-sm"></td>
+            <td style="padding: 0.25rem;">
+                <select name="products[${rowIndex}][name]" class="form-control form-control-sm product-select" required>
                     <option value="">Select Product</option>
                     @foreach($products as $product)
                         <option value="{{ $product->name }}" data-description="{{ $product->description }}" data-rate="{{ $product->price }}">
@@ -204,11 +199,11 @@
                     @endforeach
                 </select>
             </td>
-            <td><input type="text" name="products[${rowIndex}][description]" class="form-control"></td>
-            <td><input type="number" name="products[${rowIndex}][qty]" class="form-control qty" required></td>
-            <td><input type="number" name="products[${rowIndex}][rate]" class="form-control rate" required></td>
-            <td><input type="number" name="products[${rowIndex}][amount]" class="form-control amount" readonly></td>
-            <td><button type="button" class="btn btn-danger removeRow">X</button></td>
+            <td style="padding: 0.25rem;"><input type="text" name="products[${rowIndex}][description]" class="form-control form-control-sm"></td>
+            <td style="padding: 0.25rem;"><input type="number" name="products[${rowIndex}][qty]" class="form-control form-control-sm qty" required></td>
+            <td style="padding: 0.25rem;"><input type="number" name="products[${rowIndex}][rate]" class="form-control form-control-sm rate" required></td>
+            <td style="padding: 0.25rem;"><input type="number" name="products[${rowIndex}][amount]" class="form-control form-control-sm amount" readonly></td>
+            <td style="padding: 0.25rem;"><button type="button" class="btn btn-danger btn-sm removeRow">X</button></td>
         </tr>
     `;
     $("#productRows").append(newRow);
