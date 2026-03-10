@@ -107,4 +107,69 @@ class CustomerController extends Controller
         Session::forget(['customer_email', 'customer_mobile', 'customer_name']);
         return redirect()->route('index')->with('success', 'Logged out successfully!');
     }
-}
+
+    /**
+     * Show change password form for customer
+     */
+    public function showChangePasswordForm()
+    {
+        if (!Session::has('customer_email')) {
+            return redirect()->route('index');
+        }
+
+        $email = Session::get('customer_email');
+        $mobile = Session::get('customer_mobile');
+
+        // Get the first invoice record for this customer to edit password
+        $invoice = Invoice::where('to_email', $email)
+            ->orWhere('mobile_no', $mobile)
+            ->first();
+
+        return view('customer.change-password', compact('invoice'));
+    }
+
+    /**
+     * Handle customer password change
+     */
+    public function updatePassword(Request $request)
+    {
+        if (!Session::has('customer_email')) {
+            return redirect()->route('index');
+        }
+
+        $request->validate([
+            'current_password' => 'required|string',
+            'new_password' => 'required|string|min:6|confirmed',
+        ], [
+            'current_password.required' => 'Current password is required',
+            'new_password.required' => 'New password is required',
+            'new_password.min' => 'Password must be at least 6 characters',
+            'new_password.confirmed' => 'Passwords do not match',
+        ]);
+
+        $email = Session::get('customer_email');
+        $mobile = Session::get('customer_mobile');
+
+        // Get the first invoice for this customer
+        $invoice = Invoice::where('to_email', $email)
+            ->orWhere('mobile_no', $mobile)
+            ->first();
+
+        if (!$invoice) {
+            return back()->withErrors(['email' => 'Invoice not found'])->withInput();
+        }
+
+        // Verify current password - use mobile_no as default if no password set
+        $currentPassword = $invoice->password ? $invoice->password : $invoice->mobile_no;
+        
+        if ($request->current_password !== $currentPassword) {
+            return back()->withErrors(['current_password' => 'Current password is incorrect'])->withInput();
+        }
+
+        // Update password for all invoices of this customer
+        Invoice::where('to_email', $email)
+            ->orWhere('mobile_no', $mobile)
+            ->update(['password' => $request->new_password]);
+
+        return redirect()->route('customer.dashboard')->with('success', 'Password changed successfully!');
+    }}

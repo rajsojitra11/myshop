@@ -14,7 +14,9 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\CustomerController;
 
 // ─── Public / Auth Routes ────────────────────────────────────────────────────
-
+Route::get('welcome', function () {
+    return view('welcome');
+})->name('welcome');
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('index');
 Route::post('/', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
@@ -28,6 +30,8 @@ Route::prefix('customer')->name('customer.')->group(function () {
     Route::post('login', [CustomerController::class, 'login']);
     Route::get('dashboard', [CustomerController::class, 'dashboard'])->name('dashboard');
     Route::get('invoice/{id}', [CustomerController::class, 'showInvoice'])->name('invoice');
+    Route::get('change-password', [CustomerController::class, 'showChangePasswordForm'])->name('password.form');
+    Route::post('change-password', [CustomerController::class, 'updatePassword'])->name('password.update');
     Route::get('logout', [CustomerController::class, 'logout'])->name('logout');
 });
 
@@ -37,6 +41,8 @@ Route::prefix('supplier')->name('supplier.')->group(function () {
     Route::get('login', [SupplierController::class, 'showLoginForm'])->name('login');
     Route::post('login', [SupplierController::class, 'login']);
     Route::get('dashboard', [SupplierController::class, 'dashboard'])->name('dashboard');
+    Route::get('change-password', [SupplierController::class, 'showChangePasswordForm'])->name('password.form');
+    Route::post('change-password', [SupplierController::class, 'updatePassword'])->name('password.update');
     Route::get('logout', [SupplierController::class, 'logout'])->name('logout');
 });
 

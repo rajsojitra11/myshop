@@ -84,6 +84,56 @@ class SupplierController extends Controller
         return redirect()->route('index')->with('success', 'Logged out successfully!');
     }
 
+    /**
+     * Show change password form for supplier
+     */
+    public function showChangePasswordForm()
+    {
+        if (!Session::has('supplier_email')) {
+            return redirect()->route('index');
+        }
+
+        $supplierId = Session::get('supplier_db_id');
+        $supplier = Supplier::findOrFail($supplierId);
+
+        return view('supplier.change-password', compact('supplier'));
+    }
+
+    /**
+     * Handle supplier password change
+     */
+    public function updatePassword(Request $request)
+    {
+        if (!Session::has('supplier_email')) {
+            return redirect()->route('index');
+        }
+
+        $request->validate([
+            'current_password' => 'required|string',
+            'new_password' => 'required|string|min:6|confirmed',
+        ], [
+            'current_password.required' => 'Current password is required',
+            'new_password.required' => 'New password is required',
+            'new_password.min' => 'Password must be at least 6 characters',
+            'new_password.confirmed' => 'Passwords do not match',
+        ]);
+
+        $supplierId = Session::get('supplier_db_id');
+        $supplier = Supplier::findOrFail($supplierId);
+
+        // Verify current password
+        $currentPassword = $supplier->password ? $supplier->password : $supplier->supplier_id;
+        
+        if ($request->current_password !== $currentPassword) {
+            return back()->withErrors(['current_password' => 'Current password is incorrect'])->withInput();
+        }
+
+        // Update password
+        $supplier->update(['password' => $request->new_password]);
+
+        return redirect()->route('supplier.dashboard')->with('success', 'Password changed successfully!');
+    }
+
     public function index()
     {
         $suppliers = Supplier::where('user_id', Auth::id())->get();

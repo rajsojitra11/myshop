@@ -6,9 +6,14 @@
         <div class="col-md-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2><i class="fas fa-file-invoice"></i> My Invoices</h2>
-                <a href="{{ route('customer.logout') }}" class="btn btn-danger btn-sm">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
+                <div class="btn-group" role="group">
+                    <a href="{{ route('customer.password.form') }}" class="btn btn-warning btn-sm">
+                        <i class="fas fa-lock"></i> Change Password
+                    </a>
+                    <a href="{{ route('customer.logout') }}" class="btn btn-danger btn-sm">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
             </div>
 
             @if (session('success'))

@@ -400,6 +400,9 @@
                 <h2>MyShop Supplier</h2>
             </div>
             <div class="navbar-actions">
+                <a href="{{ route('supplier.password.form') }}">
+                    <i class="fas fa-lock"></i> Change Password
+                </a>
                 <a href="{{ route('supplier.logout') }}">
                     <i class="fas fa-sign-out-alt"></i>Logout
                 </a>
