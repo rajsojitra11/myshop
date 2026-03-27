@@ -16,6 +16,7 @@ use App\Http\Controllers\CustomerController;
 // ─── Public / Auth Routes ────────────────────────────────────────────────────
 
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('index');
+Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('register', [UserController::class, 'register'])->name('register');

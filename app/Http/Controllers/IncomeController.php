@@ -9,9 +9,12 @@ use Illuminate\Support\Facades\DB;
 
 class IncomeController extends Controller
 {
-    public function index()
+    public function index(Request $request = null)
     {
+        $request = $request ?? request();
         $userId = Auth::id();
+        $month = $request->query('month', date('m'));
+        $year = $request->query('year', date('Y'));
 
         // Build income query (manual incomes)
         $incomeQuery = Income::where('user_id', $userId)
@@ -39,11 +42,15 @@ class IncomeController extends Controller
 
         // Chart data
         $incomeChart = Income::where('user_id', $userId)
+            ->whereMonth('income_date', $month)
+            ->whereYear('income_date', $year)
             ->select(DB::raw("DATE(income_date) as date"), DB::raw("SUM(amount) as total"))
             ->groupBy('date');
 
         $invoiceChart = DB::table('invoices')
             ->where('user_id', $userId)
+            ->whereMonth('created_at', $month)
+            ->whereYear('created_at', $year)
             ->select(DB::raw("DATE(created_at) as date"), DB::raw("SUM(total) as total"))
             ->groupBy('date');
 

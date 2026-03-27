@@ -15,7 +15,7 @@
 
     <div class="row">
         <!-- Total Expense Card -->
-        <div class="col-md-4">
+        <div class="col-md-8">
             <div class="info-box bg-danger">
                 <span class="info-box-icon"><i class="fas fa-wallet"></i></span>
                 <div class="info-box-content">
@@ -28,70 +28,37 @@
             <div class="row mt-4">
                 <div class="col-md-12">
                     <div class="card card-outline card-success">
-                        <div class="card-header">
+                        <div class="card-header d-flex justify-content-between align-items-center">
                             <h3 class="card-title">Expense Overview</h3>
+                            <form method="GET" action="{{ route('expense') }}" class="form-inline ml-auto">
+                                <select name="month" class="form-control form-control-sm mr-2" onchange="this.form.submit()">
+                                    @foreach(range(1, 12) as $m)
+                                        <option value="{{ $m }}" {{ request('month', date('m')) == $m ? 'selected' : '' }}>
+                                            {{ date('F', mktime(0, 0, 0, $m, 1)) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <select name="year" class="form-control form-control-sm" onchange="this.form.submit()">
+                                    @foreach(range(date('Y') - 5, date('Y')) as $y)
+                                        <option value="{{ $y }}" {{ request('year', date('Y')) == $y ? 'selected' : '' }}>
+                                            {{ $y }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </form>
                         </div>
                         <div class="card-body">
-                            @if($chartData->isEmpty())
-                                <p class="text-center text-muted">No expense data to display in the chart.</p>
-                            @else
-                                <canvas id="staticExpenseChart" height="100"></canvas>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Date Range Filter -->
-           <!-- Date Range Filter -->
-<div class="row mt-4">
-    <div class="col-md-12">
-        <div class="card card-outline card-info">
-            <div class="card-header">
-                <h3 class="card-title">Find Expense Between Dates</h3>
-            </div>
-            <div class="card-body">
-                <form method="GET" action="{{ route('expense') }}">
-                    <div class="row">
-                        <div class="col-md-5">
-                            <label>From Date:</label>
-                            <input type="date" class="form-control" name="start_date" value="{{ request('start_date') }}">
-                        </div>
-                        <div class="col-md-5">
-                            <label>To Date:</label>
-                            <input type="date" class="form-control" name="end_date" value="{{ request('end_date') }}">
-                        </div>
-                    </div>
-                    <div class="row mt-3 text-center">
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-primary">Search</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-            <!-- Filtered Total Expense Box -->
-            @if(isset($filteredTotal))
-                <div class="row mt-3">
-                    <div class="col-md-12">
-                        <div class="info-box bg-info">
-                            <span class="info-box-icon"><i class="fas fa-coins"></i></span>
-                            <div class="info-box-content">
-                                <span class="info-box-text">Total Expense (Filtered)</span>
-                                <span class="info-box-number">₹ {{ number_format($filteredTotal, 2) }}</span>
-                                <span class="info-box-text small">From {{ \Carbon\Carbon::parse($startDate)->format('d M Y') }} to {{ \Carbon\Carbon::parse($endDate)->format('d M Y') }}</span>
+                            <div style="position: relative; height:300px; width:100%">
+                                <canvas id="monthlyExpenseChart"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
-            @endif
+            </div>
         </div>
 
         <!-- Add Expense Form -->
-        <div class="col-md-8">
+        <div class="col-md-4">
             <div class="card card-primary">
                 <div class="card-header">
                     <h3 class="card-title">Add New Expense</h3>
@@ -131,7 +98,7 @@
                 <div class="card-header">
                     <h3 class="card-title">Expense List</h3>
                 </div>
-                <div class="card-body table-responsive">
+                <div class="card-body table-responsive" id="data-container">
                     <table class="table table-bordered table-hover">
                         <thead class="thead-dark">
                             <tr>
@@ -156,8 +123,8 @@
                             @endforelse
                         </tbody>
                     </table>
-                    <div class="d-flex justify-content-center">
-                        {{ $expenses->links() }}
+                    <div class="mt-2 d-flex justify-content-end">
+                        {{ $expenses->links('pagination::bootstrap-4') }}
                     </div>
                 </div>
             </div>
@@ -168,40 +135,86 @@
 <!-- Chart.js Script -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    @if(!$chartData->isEmpty())
-        const ctx = document.getElementById('staticExpenseChart').getContext('2d');
-        const chartLabels = {!! json_encode($chartData->pluck('category')) !!};
-        const chartValues = {!! json_encode($chartData->pluck('total')) !!};
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('monthlyExpenseChart').getContext('2d');
+        
+        const rawChartData = {!! json_encode($chartData) !!};
+        const expenseDataMap = {};
+        
+        // Ensure same dates add up
+        rawChartData.forEach(item => {
+            const date = item.date;
+            const total = parseFloat(item.total);
+            expenseDataMap[date] = (expenseDataMap[date] || 0) + total;
+        });
+
+        const selectedMonth = {{ request('month', date('m')) }};
+        const selectedYear = {{ request('year', date('Y')) }};
+        const totalDays = new Date(selectedYear, selectedMonth, 0).getDate();
+
+        const labels = [];
+        const values = [];
+
+        for (let day = 1; day <= totalDays; day++) {
+            const fullDateKey = `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            labels.push(day);
+            values.push(expenseDataMap[fullDateKey] || 0);
+        }
 
         new Chart(ctx, {
-            type: 'pie',
+            type: 'bar',
             data: {
-                labels: chartLabels,
+                labels: labels,
                 datasets: [{
-                    label: 'Expense Categories',
-                    data: chartValues,
-                    backgroundColor: [
-                        '#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc',
-                        '#8e44ad', '#1abc9c', '#d35400', '#2c3e50', '#c0392b'
-                    ],
-                    borderColor: '#fff',
-                    borderWidth: 2
+                    label: 'Expense (₹)',
+                    data: values,
+                    backgroundColor: 'rgba(220, 53, 69, 0.8)',
+                    borderColor: '#dc3545',
+                    borderWidth: 1,
+                    borderRadius: 3
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { 
+                        beginAtZero: true,
+                        ticks: { callback: v => '₹' + v.toLocaleString() } 
+                    },
+                    x: { grid: { display: false }, ticks: { font: { size: 10 }, autoSkip: false } }
+                },
                 plugins: {
-                    legend: { position: 'bottom' },
+                    legend: { display: false },
                     tooltip: {
                         callbacks: {
-                            label: function(context) {
-                                return context.label + ': ₹' + context.raw;
-                            }
+                            title: (items) => `Day ${items[0].label}`,
+                            label: (context) => ` ₹${context.raw.toLocaleString()}`
                         }
                     }
                 }
             }
         });
-    @endif
+    });
+
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.pagination a')) {
+            e.preventDefault();
+            let url = e.target.closest('.pagination a').href;
+            
+            fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                .then(response => response.text())
+                .then(html => {
+                    let parser = new DOMParser();
+                    let doc = parser.parseFromString(html, 'text/html');
+                    let newContainer = doc.getElementById('data-container');
+                    if (newContainer) {
+                        document.getElementById('data-container').innerHTML = newContainer.innerHTML;
+                        window.history.pushState(null, '', url);
+                    }
+                })
+                .catch(err => console.error('Error fetching pagination:', err));
+        }
+    });
 </script>
 @endsection

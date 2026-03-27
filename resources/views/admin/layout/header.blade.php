@@ -118,31 +118,49 @@
           <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
         </div>
       </li>
+      @php
+          $lowStockCount = 0;
+          $lowStockItems = [];
+          if (Auth::check()) {
+              $userProducts = \App\Models\Product::where('user_id', Auth::id())->get();
+              $soldQtyMap = \App\Models\InvoiceProduct::select('name', \Illuminate\Support\Facades\DB::raw('SUM(qty) as sold'))->groupBy('name')->pluck('sold', 'name');
+              foreach($userProducts as $product) {
+                  $available = $product->stock_quantity - ($soldQtyMap[$product->name] ?? 0);
+                  if ($available < 10) {
+                      $lowStockCount++;
+                      $lowStockItems[] = [
+                          'name' => $product->name,
+                          'available' => $available
+                      ];
+                  }
+              }
+          }
+      @endphp
       <!-- Notifications Dropdown Menu -->
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-bell"></i>
-          <span class="badge badge-warning navbar-badge">15</span>
+          @if($lowStockCount > 0)
+            <span class="badge badge-warning navbar-badge">{{ $lowStockCount }}</span>
+          @endif
         </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <span class="dropdown-item dropdown-header">15 Notifications</span>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="max-height: 400px; overflow-y: auto;">
+          <span class="dropdown-item dropdown-header">{{ $lowStockCount }} Notifications</span>
           <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> 4 new messages
-            <span class="float-right text-muted text-sm">3 mins</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-users mr-2"></i> 8 friend requests
-            <span class="float-right text-muted text-sm">12 hours</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-file mr-2"></i> 3 new reports
-            <span class="float-right text-muted text-sm">2 days</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+          @if($lowStockCount > 0)
+            @foreach($lowStockItems as $item)
+                <a href="{{ route('product.index') }}" class="dropdown-item text-danger">
+                  <i class="fas fa-exclamation-circle mr-2"></i> {{ \Illuminate\Support\Str::limit($item['name'], 15) }}
+                  <span class="float-right font-weight-bold text-sm">{{ $item['available'] }} pending</span>
+                </a>
+                <div class="dropdown-divider"></div>
+            @endforeach
+            <a href="{{ route('product.index') }}" class="dropdown-item dropdown-footer text-center">Manage Products</a>
+          @else
+            <a href="{{ route('product.index') }}" class="dropdown-item text-success">
+              <i class="fas fa-check-circle mr-2"></i> All product stocks healthy!
+            </a>
+          @endif
         </div>
       </li>
       <li class="nav-item">
@@ -212,7 +230,7 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           
           <li class="nav-item menu-open">
-            <a href="{{Route('dashboard')}}" class="nav-link active">
+            <a href="{{Route('dashboard')}}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
@@ -222,13 +240,13 @@
             
           </li>
           <li class="nav-item">
-            <a href="{{ route('income.index') }}" class="nav-link">
+            <a href="{{ route('income.index') }}" class="nav-link {{ request()->routeIs('income.*') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-coins"></i>
                 <p>Income</p>
             </a>
         </li>
           <li class="nav-item">
-            <a href="{{Route('expense')}}" class="nav-link">
+            <a href="{{Route('expense')}}" class="nav-link {{ request()->routeIs('expense') ? 'active' : '' }}">
               <i class="nav-icon fas fa-wallet"></i>
               <p>
                 Expense
@@ -237,7 +255,7 @@
             </a>            
           </li>
           <li class="nav-item">
-            <a href="{{Route('supplier')}}" class="nav-link">
+            <a href="{{Route('supplier')}}" class="nav-link {{ request()->routeIs('supplier') ? 'active' : '' }}">
               <i class="nav-icon fas fa-handshake"></i>
               <p>
                 Supplier
@@ -247,7 +265,7 @@
           </li>
         </li>
         <li class="nav-item">
-          <a href="{{Route('product.index')}}" class="nav-link">
+          <a href="{{Route('product.index')}}" class="nav-link {{ request()->routeIs('product.*') ? 'active' : '' }}">
             <i class="nav-icon fas fa-cubes"></i>
             <p>
               Product
@@ -256,7 +274,7 @@
           </a>            
         </li>
         <li class="nav-item">
-          <a href="{{Route('customer')}}" class="nav-link">
+          <a href="{{Route('customer')}}" class="nav-link {{ request()->routeIs('customer') ? 'active' : '' }}">
             <i class="nav-icon fas fa-users"></i>
             <p>
               Customers
@@ -265,7 +283,7 @@
           </a>  
         </li>      
         <li class="nav-item">
-          <a href="{{Route('invoice.create')}}" class="nav-link">
+          <a href="{{Route('invoice.create')}}" class="nav-link {{ request()->routeIs('invoice.*') ? 'active' : '' }}">
             <i class="nav-icon fas fa-file-invoice"></i>
             <p>
               Invoice
@@ -276,7 +294,7 @@
                 
           
         <li class="nav-item">
-          <a href="{{Route('setting')}}" class="nav-link">
+          <a href="{{Route('setting')}}" class="nav-link {{ request()->routeIs('setting') ? 'active' : '' }}">
             <i class="nav-icon fas fa-cog"></i>
             <p>
               Settings

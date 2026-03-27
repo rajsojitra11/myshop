@@ -21,3 +21,9 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+/wireframes
+/diagrams
+/use-case-diagram.puml
+/SYSTEM_ARCHITECTURE.md
+/CODING_STANDARDS.md
+/use-case-diagram.md

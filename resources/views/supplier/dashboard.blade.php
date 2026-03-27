@@ -503,23 +503,32 @@
 
         <!-- Stock Records Section -->
         <div class="stock-section">
-            <div class="section-header">
+            @if($stocks->total() > 0 || request('search'))
+            <div class="section-header" style="border-bottom: 1px solid #dee2e6; background: #f8f9fa; color: #333;">
                 <div class="section-header-icon">
                     <i class="fas fa-boxes"></i>
                 </div>
                 <div>
                     <h3>Stock Records</h3>
                 </div>
-                @if($stocks->count() > 0)
-                    <div class="section-header-meta">
-                        Total Records: <strong>{{ $stocks->total() }}</strong>
+                <div class="ms-auto" style="margin-left:auto; display:flex; align-items:center; gap:20px; flex-wrap: wrap;">
+                    <form id="stockSearchForm" method="GET" action="{{ route('supplier.dashboard') }}" class="d-flex m-0 align-items-center" style="gap: 10px; flex-wrap: nowrap;" onsubmit="event.preventDefault();">
+                        <div style="position: relative; width: 100%; max-width: 260px;">
+                            <input type="text" name="search" value="{{ request('search') }}" id="stockSearchInput" class="form-control w-100" style="min-width: 180px; border: 2px solid #764ba2; border-radius: 25px; padding: 10px 45px 10px 20px; color: #764ba2; font-weight: 600; background-color: #f8f6fc; box-shadow: 0 4px 12px rgba(118, 75, 162, 0.15);">
+                            <i class="fas fa-search" style="position: absolute; right: 18px; top: 50%; transform: translateY(-50%); color: #764ba2; font-size: 16px; pointer-events: none;"></i>
+                        </div>
+                    </form>
+                    <div class="section-header-meta" style="padding: 8px 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 20px; font-weight: 600; box-shadow: 0 4px 10px rgba(102, 126, 234, 0.2); white-space: nowrap;">
+                        Total: <span id="total-records-count">{{ $stocks->total() }}</span>
                     </div>
-                @endif
+                </div>
             </div>
+            @endif
 
+            <div id="stock-data-container">
             @if($stocks->count() > 0)
-                <div class="table-wrapper">
-                    <table class="table">
+                <div class="table-wrapper table-responsive p-3">
+                    <table class="table table-bordered table-striped table-hover" id="stockTable">
                         <thead>
                             <tr>
                                 <th style="width: 60px;">#</th>
@@ -565,10 +574,65 @@
                     </div>
                 </div>
             @endif
+            </div>
         </div>
     </div>
 
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+    <script>
+    // AJAX Auto-search and AJAX Pagination
+    $(document).ready(function() {
+        let searchTimeout;
+        const searchInput = document.getElementById('stockSearchInput');
+        
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                let query = this.value;
+                let url = new URL('{{ route('supplier.dashboard') }}');
+                if (query) {
+                    url.searchParams.set('search', query);
+                }
+                
+                searchTimeout = setTimeout(() => {
+                    fetchData(url);
+                }, 400); // 400ms debounce
+            });
+        }
+
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.pagination a')) {
+                e.preventDefault();
+                let url = e.target.closest('.pagination a').href;
+                fetchData(url);
+            }
+        });
+
+        function fetchData(url) {
+            fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                .then(response => response.text())
+                .then(html => {
+                    let parser = new DOMParser();
+                    let doc = parser.parseFromString(html, 'text/html');
+                    
+                    let newContainer = doc.getElementById('stock-data-container');
+                    if (newContainer) {
+                        document.getElementById('stock-data-container').innerHTML = newContainer.innerHTML;
+                    }
+                    
+                    let newCount = doc.getElementById('total-records-count');
+                    let oldCount = document.getElementById('total-records-count');
+                    if (newCount && oldCount) {
+                        oldCount.innerHTML = newCount.innerHTML;
+                    }
+
+                    window.history.pushState(null, '', url);
+                })
+                .catch(e => console.error(e));
+        }
+    });
+    </script>
 </body>
 </html>

@@ -9,45 +9,32 @@ use Illuminate\Support\Facades\DB;
 
 class ExpenseController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request = null)
     {
+        $request = $request ?? request();
         $user = Auth::user();
-
-        $startDate = $request->start_date;
-        $endDate = $request->end_date;
+        
+        $month = $request->query('month', date('m'));
+        $year = $request->query('year', date('Y'));
 
         $query = Expense::where('user_id', $user->id);
 
-        if ($startDate && $endDate) {
-            $query->whereBetween('expense_date', [$startDate, $endDate]);
-        }
-
-        // Clone for filtered sum BEFORE paginate modifies the query
-        $filteredQuery = clone $query;
-
-        // Expenses for the table (paginate must be last)
+        // Expenses for the table
         $expenses = $query->orderBy('expense_date', 'desc')->paginate(10);
 
-        // Overall total (not filtered)
+        // Overall total
         $total = Expense::where('user_id', $user->id)->sum('amount');
 
-        // Filtered total
-        $filteredTotal = ($startDate && $endDate) ? $filteredQuery->sum('amount') : null;
-
-        // Chart data (can also be filtered if needed)
+        // Daily chart data
         $chartData = Expense::where('user_id', $user->id)
-            ->select('category', DB::raw('SUM(amount) as total'))
-            ->groupBy('category')
+            ->whereMonth('expense_date', $month)
+            ->whereYear('expense_date', $year)
+            ->select(DB::raw("DATE(expense_date) as date"), DB::raw("SUM(amount) as total"))
+            ->groupBy('date')
+            ->orderBy('date', 'asc')
             ->get();
 
-        return view('admin.expense', compact(
-            'expenses',
-            'total',
-            'filteredTotal',
-            'chartData',
-            'startDate',
-            'endDate'
-        ));
+        return view('admin.expense', compact('expenses', 'total', 'chartData'));
     }
 
     public function store(Request $request)

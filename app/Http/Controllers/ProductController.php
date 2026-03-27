@@ -72,7 +72,8 @@ class ProductController extends Controller
             'code' => 'required|string|max:255',
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
-            'quantity' => 'required|integer|min:0'
+            'quantity' => 'required|integer|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         $product = Product::findOrFail($id);
@@ -81,12 +82,21 @@ class ProductController extends Controller
             return redirect()->route('product.index')->with('error', 'Unauthorized action.');
         }
 
-        $product->update([
+        $data = [
             'code' => $request->code,
             'name' => $request->name,
             'price' => $request->price,
             'stock_quantity' => $request->quantity,
-        ]);
+        ];
+
+        if ($request->hasFile('image')) {
+            if ($product->image && Storage::disk('public')->exists($product->image)) {
+                Storage::disk('public')->delete($product->image);
+            }
+            $data['image'] = $request->file('image')->store('products', 'public');
+        }
+
+        $product->update($data);
 
         return redirect()->route('product.index')->with('psuccess', 'Product updated successfully!');
     }

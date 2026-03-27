@@ -58,7 +58,7 @@ class SupplierController extends Controller
     /**
      * Show supplier dashboard with their profile
      */
-    public function dashboard()
+    public function dashboard(Request $request)
     {
         if (!Session::has('supplier_email')) {
             return redirect()->route('index');
@@ -66,7 +66,19 @@ class SupplierController extends Controller
 
         $supplierId = Session::get('supplier_db_id');
         $supplier = Supplier::findOrFail($supplierId);
-        $stocks = \App\Models\SupplierStock::where('supplier_id', $supplierId)->orderBy('date', 'desc')->paginate(10);
+        
+        $query = \App\Models\SupplierStock::where('supplier_id', $supplierId);
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('product', 'like', "%{$search}%")
+                  ->orWhere('amount', 'like', "%{$search}%")
+                  ->orWhere('date', 'like', "%{$search}%");
+            });
+        }
+
+        $stocks = $query->orderBy('date', 'desc')->paginate(10)->appends(['search' => $request->search]);
 
         return view('supplier.dashboard', compact('supplier', 'stocks'));
     }

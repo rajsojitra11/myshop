@@ -60,7 +60,7 @@
                      alt="{{ $product->name }}" 
                      class="w-full h-40 object-cover rounded-lg"
                      loading="lazy"
-                     onerror="this.src='{{ asset('images/default.png') }}';" />
+                     onerror="this.onerror=null; this.src='{{ asset('images/default.png') }}';" />
 
                 <div class="product-details mt-3">
                     <div><label class="font-bold">Code:</label> {{ $product->code }}</div>
@@ -110,7 +110,7 @@
 <div id="editProductModal" class="modal-overlay">
     <div class="modal-content">
         <h2 class="text-lg font-bold mb-4">Edit Product</h2>
-        <form id="editProductForm" method="POST">
+        <form id="editProductForm" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <input type="hidden" id="editProductId" name="id">
@@ -127,6 +127,8 @@
             <label class="block mt-2">Quantity:</label>
             <input type="number" id="editProductQuantity" name="quantity" class="w-full p-2 border rounded">
 
+            <label class="block mt-2">Image (Optional):</label>
+            <input type="file" id="editProductImage" name="image" class="w-full p-2 border rounded" accept="image/*">
 
             <div class="mt-4 flex justify-between">
                 <button type="button" onclick="closeEditModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
