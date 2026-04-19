@@ -41,10 +41,19 @@ class CustomerController extends Controller
             return back()->withErrors(['email_mobile' => 'No invoice found with this email or mobile'])->withInput();
         }
 
-        // Simple password verification - you can use the mobile_no as password
-        // Or implement your own logic here
-        if ($request->password !== $invoice->mobile_no) {
-            return back()->withErrors(['password' => 'Invalid password'])->withInput();
+        // Check if customer has a custom hashed password
+        $customerPassword = \App\Models\CustomerPassword::where('email', $invoice->to_email)->first();
+
+        if ($customerPassword) {
+            // Verify against hashed password
+            if (!\Illuminate\Support\Facades\Hash::check($request->password, $customerPassword->password)) {
+                return back()->withErrors(['password' => 'Invalid password'])->withInput();
+            }
+        } else {
+            // Fallback: use mobile_no as password (original behavior)
+            if ($request->password !== $invoice->mobile_no) {
+                return back()->withErrors(['password' => 'Invalid password'])->withInput();
+            }
         }
 
         // Store customer session

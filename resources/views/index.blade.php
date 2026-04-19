@@ -167,7 +167,7 @@
                     </script>
 
                     <div class="remember-forgot">
-                        <a href="#">Forgot Password?</a>
+                        <a href="{{ route('password.forgot') }}">Forgot Password?</a>
                     </div>
 
                     <button type="submit" class="btn">Sign in</button>
@@ -233,6 +233,10 @@
                         });
                     </script>
 
+                    <div class="remember-forgot">
+                        <a href="{{ route('customer.password.forgot') }}">Forgot Password?</a>
+                    </div>
+
                     <button type="submit" class="btn" style="margin-top: 10px;">View My Invoices</button>
                 </form>
 
@@ -295,6 +299,10 @@
                             this.textContent = type === "password" ? "👁️" : "🙈";
                         });
                     </script>
+
+                    <div class="remember-forgot">
+                        <a href="{{ route('supplier.password.forgot') }}">Forgot Password?</a>
+                    </div>
 
                     <button type="submit" class="btn" style="margin-top: 10px;">View Profile</button>
                 </form>

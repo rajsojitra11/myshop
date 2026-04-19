@@ -21,7 +21,7 @@ class SupplierController extends Controller
     }
 
     /**
-     * Handle supplier login - verify email and supplier_id as password
+     * Handle supplier login - verify email and password
      */
     public function login(Request $request)
     {
@@ -41,9 +41,17 @@ class SupplierController extends Controller
             return back()->withErrors(['email' => 'No supplier found with this email'])->withInput();
         }
 
-        // Verify password is supplier_id
-        if ($request->password !== $supplier->supplier_id) {
-            return back()->withErrors(['password' => 'Invalid password'])->withInput();
+        // Check if supplier has a custom hashed password
+        if ($supplier->password) {
+            // Verify against hashed password
+            if (!\Illuminate\Support\Facades\Hash::check($request->password, $supplier->password)) {
+                return back()->withErrors(['password' => 'Invalid password'])->withInput();
+            }
+        } else {
+            // Fallback: use supplier_id as password (original behavior)
+            if ($request->password !== $supplier->supplier_id) {
+                return back()->withErrors(['password' => 'Invalid password'])->withInput();
+            }
         }
 
         // Store supplier session

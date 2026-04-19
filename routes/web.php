@@ -12,6 +12,7 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ForgotPasswordController;
 
 // ─── Public / Auth Routes ────────────────────────────────────────────────────
 
@@ -22,6 +23,16 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('register', [UserController::class, 'register'])->name('register');
 Route::post('registers', [RegisterController::class, 'register'])->name('registers');
 
+// ─── Forgot Password / OTP Routes ───────────────────────────────────────────
+
+Route::get('forgot-password', [ForgotPasswordController::class, 'showForgotForm'])->name('password.forgot');
+Route::post('forgot-password/send-otp', [ForgotPasswordController::class, 'sendOtp'])->name('password.send-otp');
+Route::get('forgot-password/verify-otp', [ForgotPasswordController::class, 'showVerifyOtpForm'])->name('password.verify-otp-form');
+Route::post('forgot-password/verify-otp', [ForgotPasswordController::class, 'verifyOtp'])->name('password.verify-otp');
+Route::get('forgot-password/reset', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset-form');
+Route::post('forgot-password/reset', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
+Route::post('forgot-password/resend-otp', [ForgotPasswordController::class, 'resendOtp'])->name('password.resend-otp');
+
 // ─── Customer Routes (Public) ────────────────────────────────────────────────
 
 Route::prefix('customer')->name('customer.')->group(function () {
@@ -30,6 +41,15 @@ Route::prefix('customer')->name('customer.')->group(function () {
     Route::get('dashboard', [CustomerController::class, 'dashboard'])->name('dashboard');
     Route::get('invoice/{id}', [CustomerController::class, 'showInvoice'])->name('invoice');
     Route::get('logout', [CustomerController::class, 'logout'])->name('logout');
+
+    // Customer Forgot Password
+    Route::get('forgot-password', [ForgotPasswordController::class, 'showCustomerForgotForm'])->name('password.forgot');
+    Route::post('forgot-password/send-otp', [ForgotPasswordController::class, 'customerSendOtp'])->name('password.send-otp');
+    Route::get('forgot-password/verify-otp', [ForgotPasswordController::class, 'showCustomerVerifyOtpForm'])->name('password.verify-otp-form');
+    Route::post('forgot-password/verify-otp', [ForgotPasswordController::class, 'customerVerifyOtp'])->name('password.verify-otp');
+    Route::post('forgot-password/resend-otp', [ForgotPasswordController::class, 'customerResendOtp'])->name('password.resend-otp');
+    Route::get('forgot-password/reset', [ForgotPasswordController::class, 'showCustomerResetForm'])->name('password.reset-form');
+    Route::post('forgot-password/reset', [ForgotPasswordController::class, 'customerResetPassword'])->name('password.update');
 });
 
 // ─── Supplier Routes (Public) ────────────────────────────────────────────────
@@ -39,6 +59,15 @@ Route::prefix('supplier')->name('supplier.')->group(function () {
     Route::post('login', [SupplierController::class, 'login']);
     Route::get('dashboard', [SupplierController::class, 'dashboard'])->name('dashboard');
     Route::get('logout', [SupplierController::class, 'logout'])->name('logout');
+
+    // Supplier Forgot Password
+    Route::get('forgot-password', [ForgotPasswordController::class, 'showSupplierForgotForm'])->name('password.forgot');
+    Route::post('forgot-password/send-otp', [ForgotPasswordController::class, 'supplierSendOtp'])->name('password.send-otp');
+    Route::get('forgot-password/verify-otp', [ForgotPasswordController::class, 'showSupplierVerifyOtpForm'])->name('password.verify-otp-form');
+    Route::post('forgot-password/verify-otp', [ForgotPasswordController::class, 'supplierVerifyOtp'])->name('password.verify-otp');
+    Route::post('forgot-password/resend-otp', [ForgotPasswordController::class, 'supplierResendOtp'])->name('password.resend-otp');
+    Route::get('forgot-password/reset', [ForgotPasswordController::class, 'showSupplierResetForm'])->name('password.reset-form');
+    Route::post('forgot-password/reset', [ForgotPasswordController::class, 'supplierResetPassword'])->name('password.update');
 });
 
 // ─── Protected Routes (requires login) ───────────────────────────────────────
