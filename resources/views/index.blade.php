@@ -167,9 +167,6 @@
                     </script>
 
                     <div class="remember-forgot">
-                        <label for="remember">
-                            <input type="checkbox" id="remember" name="remember" /> Remember Me
-                        </label>
                         <a href="#">Forgot Password?</a>
                     </div>
 

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Use Case Diagram</title>
+    <!-- FontAwesome for the Actor User Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+            margin: 0;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 2.2rem;
+            text-align: center;
+            font-weight: 600;
+        }
+        p.subtitle {
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+        .diagram-container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            justify-content: center;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Admin Module - Use Case Diagram</h1>
+    <p class="subtitle">Proper Entity Shapes (Standard UML styling)</p>
+
+    <div class="diagram-container">
+        <div class="mermaid">
+            flowchart LR
+                %% Define Actor using proper representation (User Icon instead of a circle/box)
+                Admin["fa:fa-user Admin User"]
+
+                %% Define System Boundary (Standard UML Rectangle)
+                subgraph System ["Shop Management System"]
+                    direction TB
+                    
+                    %% Main Use Cases (Standard UML Ovals / Stadiums)
+                    UC1([View Dashboard])
+                    UC2([Manage Profile Settings])
+                    
+                    subgraph PM ["Products"]
+                        direction TB
+                        UC3([Manage Products])
+                    end
+                    
+                    subgraph Sales ["Sales & Customers"]
+                        direction TB
+                        UC4([Manage Invoices])
+                        UC5([Track Customers])
+                    end
+                    
+                    subgraph Supply ["Supply Chain"]
+                        direction TB
+                        UC6([Manage Suppliers])
+                        UC7([Manage Supplier Stock])
+                    end
+                    
+                    subgraph Finance ["Finance"]
+                        direction TB
+                        UC8([Manage Income])
+                        UC9([Manage Expenses])
+                    end
+                end
+
+                %% Connections (Solid lines for direct communication paths)
+                Admin --- UC1
+                Admin --- UC2
+                Admin --- UC3
+                Admin --- UC4
+                Admin --- UC5
+                Admin --- UC6
+                Admin --- UC7
+                Admin --- UC8
+                Admin --- UC9
+                
+                %% Styling for precise UML standard shapes
+                classDef actor fill:transparent,stroke:none,color:#2563eb,font-size:18px,font-weight:bold;
+                classDef usecase fill:#ffffff,stroke:#333333,stroke-width:2px,color:#000000,rx:50px,ry:50px;
+                
+                class Admin actor;
+                class UC1,UC2,UC3,UC4,UC5,UC6,UC7,UC8,UC9 usecase;
+                
+                %% System boundary should be single outer box
+                style System fill:transparent,stroke:#333333,stroke-width:2px;
+                
+                %% Inner modules made transparent as they act mostly as logical groups
+                style PM fill:transparent,stroke:none;
+                style Sales fill:transparent,stroke:none;
+                style Supply fill:transparent,stroke:none;
+                style Finance fill:transparent,stroke:none;
+        </div>
+    </div>
+
+</body>
+</html>
